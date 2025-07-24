@@ -1,11 +1,1147 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+<html><head><base href="https://nguemav.github.io/NGUEMACINQ/"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Web TV - &#xc9;cran Large</title>
+<style>
+  body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: Arial, sans-serif;
+    background-color: #1a1a1a;
+    color: #fff;
+  }
+  .container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
+  .main-content {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+  }
+  .channels {
+    width: 20%;
+    background-color: #2c2c2c;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    transition: width 0.3s ease;
+  }
+  h1 {
+    text-align: center;
+    color: orange;
+    font-size: 1.2em;
+    margin: 10px 0;
+    flex-shrink: 0;
+  }
+  .search-container {
+    margin-bottom: 10px;
+    position: relative;
+    flex-shrink: 0;
+  }
+  #channelList::-webkit-scrollbar {
+    display: none; /* For Chrome, Safari and Opera */
+  }
+  #channelList {
+    -ms-overflow-style: none;  /* For Internet Explorer and Edge */
+    scrollbar-width: none;  /* For Firefox */
+    overflow-y: auto;
+    flex-grow: 1;
+  }
+  .player {
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #000;
+    transition: width 0.3s ease;
+    position: relative; /* Add this */
+    padding-bottom: 50px; /* Add padding to make room for the import button */
+  }
+  .channel-item {
+    padding: 10px;
+    margin-bottom: 5px;
+    background-color: #3a3a3a;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-size: 0.9em;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+  }
+  .channel-item:hover {
+    background-color: #4a4a4a;
+  }
+  .channel-logo {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+    object-fit: contain;
+  }
+  .channel-item .play-icon {
+    display: none;
+    margin-left: auto;
+    width: 20px;
+    height: 20px;
+    fill: orange; /* Changed from #e50914 to orange */
+  }
+  .channel-item.playing .play-icon {
+    display: block;
+  }
+  #videoPlayer {
+    width: 100%;
+    height: 100%;
+    max-height: calc(100vh - 120px);
+    background: #000;
+    object-fit: contain;
+  }
+  .toggleSidebar {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 1000;
+    background-color: rgba(0,0,0,0.5);
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  .hidden {
+    width: 0 !important;
+    padding: 0 !important;
+    overflow: hidden;
+  }
+  #searchInput {
+    width: calc(100% - 40px);
+    padding: 8px 30px 8px 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #3a3a3a;
+    color: #fff;
+    font-size: 0.9em;
+    box-sizing: border-box;
+  }
+  #searchInput:focus {
+    outline: none;
+    background-color: #4a4a4a;
+  }
+  .search-icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    fill: #fff;
+    pointer-events: none;
+  }
+  .context-menu {
+    display: none;
+    position: absolute;
+    background-color: #3a3a3a;
+    border: 1px solid #555;
+    border-radius: 5px;
+    padding: 5px 0;
+    z-index: 1000;
+  }
+  .context-menu-item {
+    padding: 5px 20px;
+    cursor: pointer;
+  }
+  .context-menu-item:hover {
+    background-color: #4a4a4a;
+  }
+  .welcome-message {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #1a1a1a;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    opacity: 1;
+    transition: opacity 0.5s ease-in-out;
+  }
+  .welcome-message h2 {
+    color: orange;
+    font-size: 2em;
+    text-align: center;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+  }
+  .film-section {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #000000;
+    z-index: 1000;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    background-color: orange;
+    padding: 5px 10px; /* Changed padding to match import-button */
+    border-radius: 5px; 
+    height: 18px; /* Added explicit height to match import-button */
+    line-height: 18px; /* Added line-height for vertical centering */
+  }
+  .arrow-icon {
+    width: 16px; /* Reduced size slightly */
+    height: 16px;
+    fill: #000000; /* Changed to black */
+    margin-left: 5px;
+    animation: scintillate 1s infinite alternate;
+  }
+  @keyframes scintillate {
+    0% { opacity: 0.5; }
+    100% { opacity: 1; }
+  }
+  .film-menu {
+    display: none;
+    position: fixed;
+    bottom: 40px;
+    right: 10px;
+    background-color: #2c2c2c;
+    border-radius: 5px;
+    padding: 10px;
+    z-index: 1001;
+  }
+  .film-menu a {
+    display: block;
+    color: yellow;
+    text-decoration: none;
+    padding: 5px 10px;
+  }
+  .film-menu a:hover {
+    background-color: #3a3a3a;
+  }
+  .import-m3u-section {
+    position: fixed;
+    bottom: 10px;
+    right: 200px; /* Keep this value */
+    font-size: 14px;
+    font-weight: bold;
+    color: #fff;
+    z-index: 1000;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    background-color: orange;
+    padding: 5px 10px;
+    border-radius: 5px;
+    height: 18px;
+    line-height: 18px;
+  }
+  .import-button {
+    margin-left: 10px;
+    padding: 5px 10px;
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+    border-left: 1px solid #1a1a1a; /* Added a separator */
+  }
+  .import-button:hover {
+    background-color: #ffa500;
+  }
+  .import-link-m3u-section {
+    position: fixed;
+    bottom: 10px;
+    right: 600px; /* Changed from 400px to 600px to move it left by ~2cm */
+    font-size: 14px;
+    font-weight: bold;
+    color: #fff;
+    z-index: 1000;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    background-color: orange;
+    padding: 5px 10px;
+    border-radius: 5px;
+    height: 18px;
+    line-height: 18px;
+  }
+  .import-link-button {
+    margin-left: 10px;
+    padding: 5px 10px;
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+    border-left: 1px solid #1a1a1a;
+  }
+  .import-link-button:hover {
+    background-color: #ffa500;
+  }
+  .channel-item span {
+    color: orange;
+    font-size: 1.2em;
+    font-weight: bold;
+  }
+  .player {
+    background-color: #000;
+    position: relative;
+    overflow: hidden;
+  }
+  .nguema5tv-logo-3d {
+    position: absolute;
+    top: 18px;
+    left: 18px;
+    z-index: 1100;
+    width: 220px;
+    height: 90px;
+    display: block;
+    background: #fff8e1;
+    border: 2px solid orange;
+    box-shadow: 0 0 10px #0008;
+    pointer-events: auto;
+  }
+  .fullscreen-btn {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1200;
+    background: rgba(255, 165, 0, 0.9);
+    color: #1a1a1a;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 16px;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    transition: background 0.2s;
+  }
+  .fullscreen-btn:hover {
+    background: #ffa500;
+  }
+  .player.fullscreen {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    width: 100vw !important;
+    height: 100vh !important;
+    z-index: 3000;
+    background: #000;
+  }
+  .nguema5tv-logo-3d.fullscreen-logo {
+    position: fixed !important;
+    top: 30px !important;
+    left: 30px !important;
+    z-index: 4000 !important;
+    width: 180px;
+    height: 70px;
+    pointer-events: none;
+  }
+  .fullscreen-btn.fullscreen-btn-on {
+    position: absolute;
+    bottom: 30px !important;
+    right: 30px !important;
+    z-index: 4100 !important;
+  }
+  .nguema5tv-text-3d {
+    position: absolute;
+    top: 18px;
+    left: 18px;
+    z-index: 1100;
+    font-size: 1.3em;
+    font-style: italic;
+    font-weight: bold;
+    color: #b0b0b0;
+    letter-spacing: 2px;
+    text-shadow: 1px 1px 2px #fff, 2px 2px 8px #888, 0 0 10px #888, 0 2px 0 #666, 0 4px 0 #444;
+    font-family: 'Arial Black', Arial, sans-serif;
+    background: linear-gradient(90deg, #b0b0b0 0%, #e0e0e0 50%, #888 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
+    filter: drop-shadow(0 2px 6px #222);
+    pointer-events: none;
+  }
+  .nguema-rect {
+    display: inline-block;
+    background: #252526;
+    color: #fff;
+    border-radius: 6px;
+    padding: 2px 10px 2px 10px;
+    margin-right: 6px;
+    box-shadow: 0 2px 6px #1118;
+    -webkit-text-fill-color: #fff;
+    text-fill-color: #fff;
+    -webkit-background-clip: border-box;
+    background-clip: border-box;
+  }
+  .player.fullscreen #videoPlayer {
+    width: 100vw !important;
+    height: 100vh !important;
+    max-width: 100vw !important;
+    max-height: 100vh !important;
+    object-fit: contain;
+  }
+</style>
 </head>
 <body>
-   <h1>PADELE5</h1> 
-</body>
-</html>
+<div id="welcomeMessage" class="welcome-message">
+  <h2>BIENVENUE SUR LA PLATE-FORME NGUEMA5TV</h2>
+</div>
+<button id="toggleSidebar">&#x2630;</button>
+<div class="container">
+  <div class="main-content">
+    <div class="channels" id="sidebar">
+      <h1>Cha&#xee;nes TV</h1>
+      <div class="search-container">
+        <input type="text" id="searchInput" placeholder="Rechercher une cha&#xee;ne...">
+        <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+        </svg>
+      </div>
+      <div id="channelList"></div>
+    </div>
+    <div class="player" id="playerContainer">
+      <div class="nguema5tv-logo-3d" style="display: flex; align-items: center; justify-content: center; background: none; border: none; box-shadow: none;">
+        <svg width="860" height="154" viewBox="0 0 860 154" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="silverGradient" x1="0" y1="0" x2="860" y2="0" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#b0b0b0"/>
+              <stop offset="0.5" stop-color="#e0e0e0"/>
+              <stop offset="1" stop-color="#888"/>
+            </linearGradient>
+            <linearGradient id="goldGradient" x1="570" y1="0" x2="670" y2="0" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#ffd700"/>
+              <stop offset="1" stop-color="#ffa500"/>
+            </linearGradient>
+            <filter id="shadow" x="-20" y="-20" width="900" height="200">
+              <feDropShadow dx="0" dy="8" stdDeviation="8" flood-color="#222" flood-opacity="0.7"/>
+            </filter>
+          </defs>
+          <text x="30" y="120" font-size="120" font-family="Arial Black, Arial, sans-serif" font-weight="bold"
+                fill="url(#silverGradient)" stroke="#fff8e1" stroke-width="4" filter="url(#shadow)">
+            NGUEMA
+          </text>
+          <text x="570" y="120" font-size="120" font-family="Arial Black, Arial, sans-serif" font-weight="bold"
+                fill="url(#goldGradient)" stroke="#fff8e1" stroke-width="4" filter="url(#shadow)">
+            5
+          </text>
+          <text x="650" y="120" font-size="120" font-family="Arial Black, Arial, sans-serif" font-weight="bold"
+                fill="url(#silverGradient)" stroke="#fff8e1" stroke-width="4" filter="url(#shadow)">
+            TV
+          </text>
+        </svg>
+      </div>
+      <video id="videoPlayer" controls crossorigin="anonymous" playsinline preload="auto">
+        <source src type="application/x-mpegURL">
+        <source src type="video/mp4">
+        <source src type="video/webm">
+        <source src type="video/mkv">
+        <source src type="video/ogg">
+        <source src type="video/avi">
+        <source src type="video/mpeg">
+        <source src type="video/mpg">
+        <source src type="video/ts">
+        <source src type="video/x-matroska">
+        <source src type="video/x-msvideo">
+        <source src type="video/x-flv">
+        <source src type="video/divx">
+        <source src type="video/h264">
+        Votre navigateur ne supporte pas la lecture de vidéos.
+      </video>
+      <button class="fullscreen-btn" id="fullscreenBtn" title="Plein écran">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4 4H9V2H2V9H4V4ZM20 4V9H22V2H15V4H20ZM4 20V15H2V22H9V20H4ZM20 20H15V22H22V15H20V20Z" fill="#fff"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+  <div class="import-m3u-section">
+    <span>Importer fichier M3U</span>
+    <input type="file" id="m3uFileInput" accept=".m3u,.m3u8" style="display: none;">
+    <label for="m3uFileInput" class="import-button">Importer</label>
+  </div>
+  <div class="import-link-m3u-section">
+    <span>Importer lien M3U</span>
+    <div class="import-link-button" id="importM3uLink">Importer</div>
+  </div>
+</div>
+
+<div id="contextMenu" class="context-menu">
+  <div class="context-menu-item" id="addLogo">Ajouter un logo</div>
+  <div class="context-menu-item" id="renameChannel">Renommer la cha&#xee;ne</div>
+  <div class="context-menu-item" id="deleteChannel">Supprimer la cha&#xee;ne</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<script src="https://unpkg.com/@ffmpeg/ffmpeg@0.10.1/dist/ffmpeg.min.js"></script>
+<script>
+  // Liste des chaînes TV intégrée dans le code HTML
+  const channels = [
+    { name: "TF1", logo: "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/tf1-fr.png", url: "https://raw.githubusercontent.com/Paradise-91/ParaTV/main/streams/tf1plus/tf1.m3u8" },
+    { name: "TF1 SERIE FILM", logo: "https://i.imgur.com/4CJIDKQ.png", url: "https://raw.githubusercontent.com/Paradise-91/ParaTV/main/streams/tf1plus/tf1-series-films.m3u8" },
+    { name: "TFX", logo: "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/tfx-fr.png", url: "https://raw.githubusercontent.com/Paradise-91/ParaTV/main/streams/tf1plus/tfx.m3u8" },
+    { name: "FRANCE 2", logo: "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/france-2-fr.png", url: "https://raw.githubusercontent.com/ipstreet312/freeiptv/master/ressources/ftv/py/fr2.m3u8" },
+    { name: "FRANCE 3", logo: "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/france-3-fr.png", url: "https://raw.githubusercontent.com/ipstreet312/freeiptv/master/ressources/ftv/py/fr3.m3u8" },
+    { name: "FRANCE 4", logo: "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/france-4-fr.png", url: "https://raw.githubusercontent.com/ipstreet312/freeiptv/master/ressources/ftv/py/fr4.m3u8" },
+    { name: "FRANCE 5", logo: "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/france-5-fr.png", url: "https://raw.githubusercontent.com/ipstreet312/freeiptv/master/ressources/ftv/py/fr5.m3u8" },
+    { name: "TMC", logo: "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/tmc-fr.png", url: "https://raw.githubusercontent.com/Paradise-91/ParaTV/main/streams/tf1plus/tmc.m3u8" },
+    { name: "FRANCE 24", logo: "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/france-24-fr.png", url: "https://live.france24.com/hls/live/2037179/F24_FR_HI_HLS/master_5000.m3u8" },
+    { name: "LCI", logo: "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/lci-fr.png", url: "https://raw.githubusercontent.com/ipstreet312/freeiptv/master/ressources/btv/py/lci1.m3u8" },
+    { name: "GULLI", logo: "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/gulli-fr.png", url: "https://origin-caf900c010ea8046.live.6cloud.fr/out/v1/c65696b42ca34e97a9b5f54758d6dd50/cmaf/hlsfmp4_short_q2hyb21h_gulli_sd_index.m3u8" },
+    { name: "W9", logo: "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/w9-fr.png", url: "http://4kplus.info/live/02092021iptv/pwqopprrct/271.m3u8" },
+    { name: "M6", logo: "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/m6-fr.png", url: "http://4kplus.info/live/02092021iptv/pwqopprrct/148473.m3u8" },
+    { name: "CANAL+", logo: "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/hd/canal-plus-4k-uhd-fr.png", url: "http://4kplus.info/live/02092021iptv/pwqopprrct/247.m3u8" },
+    { name: "OCS", logo: "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/ocs-city-fr.png", url: "http://4kplus.info/live/02092021iptv/pwqopprrct/235459.m3u8" },
+    { name: "JAPANIME", logo: "https://static-cdn.jtvnw.net/jtv_user_pictures/6b97e19f-4243-4d48-b794-ff8cf54d795f-profile_image-300x300.png", url: "https://foxkidstv.be:3369/stream/play.m3u8" },
+    // --- Début des chaînes à insérer après JAPANIME ---
+    { name: "ADN", logo: "https://tvpnlogopeu.samsungcloud.tv/platform/image/sourcelogo/vc/00/02/34/FRBD5100001ZA_20240214T035741SQUARE.png_20240214035742.png", url: "https://d3b73b34o7cvkq.cloudfront.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d1/cc-gz2sgqzp076kf/adn.m3u8" },
+    { name: "WASABI ANIME TV", logo: "https://fusion.molotov.tv/arts/i/446x588/Ch8SHQoUPz_rwULCVawxoY-y6dVSbxzniMwSA2pwZxgBCh8IARIbChRI5KJPYCpTskLLsUpF5Mfex7F4fxIDcG5n/jpg", url: "https://amg01796-amg01796c3-rakuten-uk-2555.playouts.now.amagi.tv/playlist/amg01796-fastmediafast-wasabii-rakutenuk/playlist.m3u8" },
+    { name: "L", logo: "https://i.ibb.co/KXhYwm0/lequipe.png", url: "https://raw.githubusercontent.com/ipstreet312/freeiptv/master/ressources/dmotion/py/eqpe/ekip.m3u8" },
+    { name: "L'QUIPE LIVE 1", logo: "https://i.ibb.co/KXhYwm0/lequipe.png", url: "https://d3awaj0f2u3w26.cloudfront.net/3/media.m3u8" },
+    { name: "L'EQUIPE LIVE 2", logo: "https://i.ibb.co/KXhYwm0/lequipe.png", url: "https://d2l55nvfkhk4sg.cloudfront.net/3/media.m3u8" },
+    { name: "SPORT EN FRANCE", logo: "https://i.ibb.co/p1stMyz/sportenfr.webp", url: "https://sp1564435593.mytvchain.info/live/sp1564435593/index.m3u8" },
+    { name: "WILD SIDE TV", logo: "https://i.ibb.co/VvMKr5V/wildside.jpg", url: "https://versatile-wildsidetv-1-fr.samsung.wurl.tv/playlist.m3u8" },
+    { name: "NOVELA STROMCAST", logo: "https://i.ibb.co/V3pfjfB/novela-channel-telepack.jpg", url: "https://stormcast-telenovelatv-1-fr.samsung.wurl.tv/playlist.m3u8" },
+    { name: "PASSION NOVELAS", logo: "https://i.imgur.com/boo9jmf.png", url: "https://d219tvyafu2vka.cloudfront.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d1/cc-csm4hzxgjueax/index.m3u8" },
+    { name: "FREQUENCE NOVELS", logo: "https://tvpdotcomdynamiclogopeu.samsungcloud.tv/resize?url=https://tvpnlogopeu.samsungcloud.tv/platform/image/sourcelogo/vc/00/02/34/FRBC800001X0_20241025T153329SQUARE.png", url: "https://d20oth1416y9a1.cloudfront.net/playlist/amg00711-zylofast-frequencenovelas-rakutenus/playlist.m3u8" },
+    { name: "TELEVISA TELENOVELA", logo: "https://github.com/tv-logo/tv-logos/blob/main/countries/france/novelas-tv-fr.png?raw=true", url: "https://40413a8d4fab4568b22187b5d7cd15c9.mediatailor.us-east-1.amazonaws.com/v1/master/44f73ba4d03e9607dcd9bebdcb8494d86964f1d8/Samsung-fr_Televisa/playlist.m3u8" },
+    { name: "IVOIRE CHANNEL", logo: "https://i.imgur.com/gKbNqQv.png", url: "https://video1.getstreamhosting.com:1936/8244/8244/playlist.m3u8" },
+    { name: "NTV", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/NtvLOGO.png/300px-NtvLOGO.png", url: "https://strhlslb01.streamakaci.tv/str_ntv_ntv/str_ntv_ntv_multi/playlist.m3u8" },
+    { name: "CEN TV", logo: "http://www.centv.ci/images/44893315_718353975187139_6159975244204343296_n.jpg", url: "https://strhlslb01.streamakaci.tv/cen/cen-multi/playlist.m3u8" },
+    { name: "DIASPORA CHANNEL", logo: "https://www.diaspora-channel.com/wp-content/uploads/2020/12/13DE2A4C-28B3-43CF-9AD5-A5D7EF8A4B98.png", url: "https://vdo3.pro-fhi.net:3218/stream/play.m3u8" },
+    { name: "AFRO MGIC CHANNEL", logo: "https://www.lyngsat.com/logo/tv/aa/afro-magic-channel.png", url: "https://video1.getstreamhosting.com:1936/8490/8490/playlist.m3u8" },
+    { name: "FAMILY CLUB", logo: "https://tvpnlogopeu.samsungcloud.tv/platform/image/sourcelogo/vc/00/02/34/FRBD2300001UQ_20240117T032758SQUARE.png_20240117032759.png", url: "https://d3kwy5wwq7dpr1.cloudfront.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d1/cc-5ty5rugo8lr9f/famcl.m3u8" },
+    { name: "TRAILERS", logo: "https://tvpnlogopeu.samsungcloud.tv/platform/image/sourcelogo/vc/00/02/34/FRBC9000041F_20240117T032749SQUARE.png_20240117032749.png", url: "https://amg01821-lovetvchannels-lovemagazinefr-samsungfr-3s8nt.amagi.tv/playlist/amg01821-lovetvchannels-lovemagazinefr-samsungfr/playlist.m3u8" },
+    { name: "CANAL 4", logo: "https://i.servimg.com/u/f76/20/26/59/00/untitl10.png", url: "https://vdo.pro-fhi.net:3605/live/dgenlcpmlive.m3u8" },
+    { name: "SUPERTOON", logo: "https://tvpdotcomdynamiclogopeu.samsungcloud.tv/resize?url=https://tvpnlogopeu.samsungcloud.tv/platform/image/sourcelogo/vc/00/02/34/FRBD5100002NL_20241030T154340SQUARE.png&h=250", url: "https://jmp2.uk/sam-FRBD5100002NL.m3u8" },
+    { name: "GONG", logo: "https://i.ibb.co/MMpFXQL/gong.jpg", url: "https://cdn-uw2-prod.tsv2.amagi.tv/linear/amg01596-gongnetworks-gong-samsungfr/playlist.m3u8" },
+    { name: "RADIO CONTACT", logo: "", url: "https://contact-live-hls.akamaized.net/hls/live/2038650/CONTACT-Live-HLS/master.m3u8" },
+    { name: "LITTORAL TV", logo: "https://i.ibb.co/tLPxcFn/littoral.png", url: "https://live.creacast.com/littoralfm-ch1/stream/playlist.m3u8" },
+    { name: "CTV AFRIQUE", logo: "https://yt3.googleusercontent.com/ytc/AIdro_mgWthNMZyU0LlqkziTT2DBO15sVmEOwOQIYSPa=s176-c-k-c0x00ffffff-no-rj", url: "https://stream.it-innov.com/ctv/tracks-v1a1/mono.m3u8" },
+    { name: "REEL TV", logo: "https://yt3.googleusercontent.com/sZxGbr7ulYBGUQPrpJbzCy62jFQ3hGhYvQikuj9lgCuLr2CMo0ZDSygm1gruazLn5VNA0gZsuQ=s160-c-k-c0x00ffffff-no-rj", url: "https://neriyastreaming.ddns.net/memfs/a59bc008-a226-430c-a050-45fa0891d8c3.m3u8" },
+    { name: "NCI", logo: "https://www.nci.ci/assets/images/logo_nci.png", url: "https://cdnapisec.kaltura.com/p/5571652/sp/557165200/playManifest/entryId/1_2gnrfyb6/protocol/https/format/applehttp/flavorIds/0.m3u8" },
+    { name: "AFROCULTURE", logo: "https://myafroculture.com/wp-content/uploads/2023/02/logo-light.png", url: "https://streamtv.cmediahosthosting.net:3836/live/myafroculturelive.m3u8" },
+    { name: "TOP SCI-FI", logo: "https://tvpdotcomdynamiclogopeu.samsungcloud.tv/resize?url=https://tvpnlogopeu.samsungcloud.tv/platform/image/sourcelogo/vc/00/02/34/FR4600001FK_20250121T012945SQUARE.png&h=250", url: "https://amg01796-amg01796c14-samsung-fr-5846.playouts.now.amagi.tv/playlist/amg01796-fastmediafast-topscifi-samsungfr/playlist.m3u8" },
+    { name: "13eme RUE", logo: "", url: "http://4kplus.info/live/02092021iptv/pwqopprrct/268.m3u8" },
+    { name: "WARNER TV", logo: "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/warner-tv-fr.png", url: "http://4kplus.info/live/02092021iptv/pwqopprrct/4195.m3u8" },
+    { name: "PARIS PREMIERE", logo: "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/paris-premiere-fr.png", url: "http://4kplus.info/live/02092021iptv/pwqopprrct/314.m3u8" },
+    { name: "TEVA", logo: "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/teva-fr.png", url: "http://4kplus.info/live/02092021iptv/pwqopprrct/283.m3u8" },
+    { name: "6TER", logo: "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/6ter-fr.png", url: "http://4kplus.info/live/02092021iptv/pwqopprrct/11035.m3u8" },
+    { name: "W9", logo: "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/w9-fr.png", url: "http://4kplus.info/live/02092021iptv/pwqopprrct/271.m3u8" },
+    { name: "M6", logo: "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/m6-fr.png", url: "http://4kplus.info/live/02092021iptv/pwqopprrct/148473.m3u8" },
+    { name: "RTL9", logo: "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/hd/rtl9-hd-fr.png", url: "http://4kplus.info/live/02092021iptv/pwqopprrct/273.m3u8" },
+    { name: "AB1", logo: "https://github.com/tv-logo/tv-logos/blob/main/countries/france/ab1-fr.png?raw=true", url: "http://4kplus.info/live/02092021iptv/pwqopprrct/280.m3u8" },
+    { name: "AB3", logo: "", url: "" },
+    { name: "AB3", logo: "", url: "http://4kplus.info/live/02092021iptv/pwqopprrct/15011.m3u8" },
+    { name: "SYFY", logo: "", url: "http://4kplus.info/live/02092021iptv/pwqopprrct/318.m3u8" },
+    { name: "RTS1", logo: "https://github.com/tv-logo/tv-logos/blob/main/countries/switzerland/rts-un-ch.png?raw=true", url: "http://4kplus.info/live/02092021iptv/pwqopprrct/43951.m3u8" },
+    { name: "RTS2", logo: "https://github.com/tv-logo/tv-logos/blob/main/countries/switzerland/rts-deux-ch.png?raw=true", url: "http://4kplus.info/live/02092021iptv/pwqopprrct/43952.m3u8" },
+    { name: "COMEDIE+", logo: "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/comedie-plus-fr.png", url: "http://4kplus.info/live/02092021iptv/pwqopprrct/319.m3u8" },
+    { name: "SUPER ECRAN1", logo: "https://github.com/tv-logo/tv-logos/blob/main/countries/canada/super-ecran-1-ca.png?raw=true", url: "http://4kplus.info/live/02092021iptv/pwqopprrct/252689.m3u8" },
+    { name: "SUPER ECRAN2", logo: "https://github.com/tv-logo/tv-logos/blob/main/countries/canada/super-ecran-2-ca.png?raw=true", url: "http://4kplus.info/live/02092021iptv/pwqopprrct/252688.m3u8" },
+    { name: "SUPER ECRAN3", logo: "https://github.com/tv-logo/tv-logos/blob/main/countries/canada/super-ecran-3-ca.png?raw=true", url: "http://4kplus.info/live/02092021iptv/pwqopprrct/252687.m3u8" },
+    { name: "SUPER ECRAN4", logo: "https://github.com/tv-logo/tv-logos/blob/main/countries/canada/super-ecran-4-ca.png?raw=true", url: "http://4kplus.info/live/02092021iptv/pwqopprrct/252686.m3u8" },
+    { name: "GONG MAX", logo: "https://i.ibb.co/MMpFXQL/gong.jpg", url: "http://4kplus.info/live/02092021iptv/pwqopprrct/4522.m3u8" },
+    { name: "DISNEY CHANNEL", logo: "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/disney-channel-fr.png", url: "http://4kplus.info/live/02092021iptv/pwqopprrct/302.m3u8" },
+    { name: "DISNEY JUNIOR", logo: "data:image/png;base64,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", url: "http://4kplus.info/live/02092021iptv/pwqopprrct/305.m3u8" },
+    { name: "DISNEY+", logo: "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/disney-channel-fr.png", url: "http://4kplus.info/live/02092021iptv/pwqopprrct/304.m3u8" },
+    { name: "NICKELODEON", logo: "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/nickelodeon-fr.png", url: "http://4kplus.info/live/02092021iptv/pwqopprrct/4185.m3u8" },
+    { name: "NICKELODEON TEEN", logo: "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/nickelodeon-teen-fr.png", url: "http://4kplus.info/live/02092021iptv/pwqopprrct/4184.m3u8" },
+    { name: "NICKELODEON JUNIOR", logo: "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/nickelodeon-junior-fr.png", url: "http://4kplus.info/live/02092021iptv/pwqopprrct/308.m3u8" },
+    { name: "TELETOON", logo: "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/teletoon-plus-1-fr.png", url: "http://4kplus.info/live/02092021iptv/pwqopprrct/300.m3u8" },
+    { name: "RMC SPORT1", logo: "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/rmc-sport-1-fr.png", url: "http://4kplus.info/live/02092021iptv/pwqopprrct/234.m3u8" },
+    { name: "RMC SPORT2", logo: "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/rmc-sport-2-fr.png", url: "http://4kplus.info/live/02092021iptv/pwqopprrct/235.m3u8" },
+    { name: "BEIN SPORT1", logo: "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/bein-sports-1-french-fr.png", url: "http://4kplus.info/live/02092021iptv/pwqopprrct/227.m3u8" },
+    { name: "BEIN SPORT2", logo: "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/bein-sports-2-french-fr.png", url: "http://4kplus.info/live/02092021iptv/pwqopprrct/227.m3u8" },
+    { name: "BEIN SPORT3", logo: "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/bein-sports-3-french-fr.png", url: "http://4kplus.info/live/02092021iptv/pwqopprrct/226.m3u8" },
+    { name: "EUROSPORT1", logo: "https://github.com/tv-logo/tv-logos/blob/main/countries/france/eurosport-1-fr.png?raw=true", url: "http://4kplus.info/live/02092021iptv/pwqopprrct/238.m3u8" },
+    { name: "EUROSPORT2", logo: "https://github.com/tv-logo/tv-logos/blob/main/countries/france/eurosport-2-fr.png?raw=true", url: "http://4kplus.info/live/02092021iptv/pwqopprrct/239.m3u8" },
+    { name: "CANAL+SPORT", logo: "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/hd/canal-plus-sport-hd-fr.png", url: "http://4kplus.info/live/02092021iptv/pwqopprrct/250.m3u8" },
+    { name: "CANAL+FOOT", logo: "https://github.com/tv-logo/tv-logos/blob/main/countries/france/canal-plus-foot-fr.png?raw=true", url: "http://4kplus.info/live/02092021iptv/pwqopprrct/256631.m3u8" },
+    { name: "CANAL+SPORT360", logo: "https://github.com/tv-logo/tv-logos/blob/main/countries/france/canal-plus-sport-360-fr.png?raw=true", url: "http://4kplus.info/live/02092021iptv/pwqopprrct/256630.m3u8" },
+    { name: "CANAL+PREMIERE LEAGUE", logo: "https://github.com/tv-logo/tv-logos/blob/main/countries/france/canal-plus-premier-league-fr.png?raw=true", url: "http://4kplus.info/live/02092021iptv/pwqopprrct/115874.m3u8" },
+    { name: "CANAL+", logo: "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/hd/canal-plus-4k-uhd-fr.png", url: "http://4kplus.info/live/02092021iptv/pwqopprrct/247.m3u8" },
+    { name: "CANAL+CINEMA", logo: "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/hd/canal-plus-cinema-hd-fr.png", url: "http://4kplus.info/live/02092021iptv/pwqopprrct/249.m3u8" },
+    { name: "CANAL+SERIES", logo: "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/canal-plus-series-fr.png", url: "http://4kplus.info/live/02092021iptv/pwqopprrct/252.m3u8" },
+    { name: "CANAL+GRAND ECRAN", logo: "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/canal-plus-grand-ecran-fr.png", url: "http://4kplus.info/live/02092021iptv/pwqopprrct/199801.m3u8" },
+    { name: "A+", logo: "https://tvradiozap.eu/tv/logos/a+ivoire.png", url: "http://69.64.57.208/atv/playlist.m3u8" },
+    { name: "MOTORVISION", logo: "https://i.ibb.co/0YKFn02/motorvisionfrs.png", url: "https://d1qswsont218xa.cloudfront.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d1/cc-im2kwho8ev6jk/mv_fr.m3u8" },
+    { name: "DIEU TV", logo: "https://i.ibb.co/xJyNqdg/dieutv.png", url: "https://cdn.katapy.io/cache/stream/katapytv/dieu/playlist.m3u8" },
+    { name: "MY TV CHANNEL", logo: "https://i.imgur.com/vh2373L.png", url: "http://connectiktv.ddns.net:5000/mytvchannel/@mytvchannel/playlist.m3u8" },
+    { name: "MY ZEN TV", logo: "https://i.ibb.co/VvRpRty/myzen.png", url: "https://amg01492-secomsasmediart-myzen-fr-rakuten-spvgz.amagi.tv/hls/amagi_hls_data_rakutenAA-myzen-fr-rakuten/CDN/master.m3u8" },
+    { name: "MIRACLE TV", logo: "https://i.imgur.com/dNPOwfm.png", url: "https://strhlslb01.streamakaci.tv/str_mtv_mtv/str_mtv_multi/playlist.m3u8" },
+    { name: "PLAY TV", logo: "https://i.imgur.com/1dmBqpf.png", url: "http://connectiktv.ddns.net:5000/playtv/@playtv/playlist.m3u8" },
+    { name: "NATURE TIME", logo: "https://images.pluto.tv/channels/61fc0df14159c40007250432/colorLogoPNG.png", url: "https://amg00090-blueantmedia-naturetime-samsungfr-yakbf.amagi.tv/playlist/amg00090-blueantmedia-naturetime-samsungfr/playlist.m3u8" },
+    { name: "SOPHIE TV", logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRgrV-9HP1lFL2Cx7f4GcFtvb9QgToaJ-AEZA&s", url: "https://bild-und-ton.stream/sophiatv-fr/smil:sophia-tv-fr.smil/playlist.m3u8" },
+    { name: "TELEMIX", logo: "https://i.ibb.co/HpX99Ks/unnamed.jpg", url: "https://haititivi.com/haiti/telemix1/index.m3u8" },
+    { name: "P2M", logo: "https://i.imgur.com/TrecSeG.png", url: "https://vdo2.pro-fhi.net:3207/stream/play.m3u8" },
+    { name: "DESTINATION NATURE", logo: "https://images.samsung.com/is/image/samsung/assets/fr/smart-tv/samsung-tv-plus/all-channels/Destination_Nature_1000x1000_Circle_300_DPI-20220915-141455.png?$330_186_PNG$", url: "https://d2cl8wi5f8zf1j.cloudfront.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d1/cc-0ay35jkybhd8m/DestinationNature_FR.m3u8" },
+    { name: "LOVE THE PLANET", logo: "https://tvpnlogopeu.samsungcloud.tv/platform/image/sourcelogo/vc/00/02/34/FRBC3900004DS_20230426T015606SQUARE.png_20230426015607.png", url: "https://amg01821-lovetvchannels-lovetheplanetfrsamsung-samsungfr-hfam1.amagi.tv/playlist/amg01821-lovetvchannels-lovetheplanetfrsamsung-samsungfr/playlist.m3u8" },
+    { name: "MHZ CHOICE", logo: "https://vhx.imgix.net/fred/assets/02012a49-7526-4336-8a91-b26db95ab8bc.png?fit=max&h=84&q=92&w=400", url: "https://mhz-samsung-linear-ca.samsung.wurl.tv/playlist.m3u8" },
+    { name: "DRIVE TV", logo: "https://tvradiozap.eu/tv/logos/drivetv.png", url: "https://amg01796-amg01796c2-rakuten-uk-3887.playouts.now.amagi.tv/playlist/amg01796-fastmediafast-drivetv-rakutenuk/playlist.m3u8" },
+    { name: "MOTOR RACING", logo: "https://tvpnlogopeu.samsungcloud.tv/platform/image/sourcelogo/vc/00/02/34/FRBD4100013LN_20231115T012253SQUARE.png_20231115012254.png", url: "https://d1j1h1zdadb91f.cloudfront.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d1/cc-50l4tj8p1zx6l/moto.m3u8" },
+    { name: "IMMERSION CRIME ET JUSTICE", logo: "https://tvpdotcomdynamiclogopeu.samsungcloud.tv/resize?url=https://tvpnlogopeu.samsungcloud.tv/platform/image/sourcelogo/vc/00/02/34/FR600002ZR_20250408T021840SQUARE.png&h=250", url: "https://d1j1h1zdadb91f.cloudfront.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d1/cc-50l4tj8p1zx6l/moto.m3u8" },
+    { name: "LOVE CRIME HISTORY", logo: "https://tvpnlogopeu.samsungcloud.tv/platform/image/sourcelogo/vc/00/02/34/FRBD43000016D_20241106T142627SQUARE.png", url: "https://d2m0unh5d7jde4.cloudfront.net/playlist/amg01821-lovetvfast-lovecrimeandhistoryfrance-samsungfr/playlist.m3u8" },
+    { name: "CINE FRISSON", logo: "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/hd/cine-plus-frisson-hd-fr.png", url: "http://4kplus.info/live/02092021iptv/pwqopprrct/257.m3u8" },
+    { name: "CINE FAMIZ", logo: "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/hd/cine-plus-famiz-hd-fr.png", url: "http://4kplus.info/live/02092021iptv/pwqopprrct/258.m3u8" },
+    { name: "CINE EMOTION", logo: "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/hd/cine-plus-emotion-hd-fr.png", url: "http://4kplus.info/live/02092021iptv/pwqopprrct/255.m3u8" },
+    { name: "OCS", logo: "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/ocs-city-fr.png", url: "http://4kplus.info/live/02092021iptv/pwqopprrct/235459.m3u8" }
+  ];
+</script>
+<script>document.addEventListener('DOMContentLoaded', function () {
+  const videoPlayer = document.getElementById('videoPlayer');
+  const sidebar = document.getElementById('sidebar');
+  const playerContainer = document.getElementById('playerContainer');
+  const toggleButton = document.getElementById('toggleSidebar');
+  const channelList = document.getElementById('channelList');
+  const searchInput = document.getElementById('searchInput');
+  const contextMenu = document.getElementById('contextMenu');
+  const addLogoItem = document.getElementById('addLogo');
+  const renameChannelItem = document.getElementById('renameChannel');
+  const deleteChannelItem = document.getElementById('deleteChannel');
+  const welcomeMessage = document.getElementById('welcomeMessage');
+  const m3uFileInput = document.getElementById('m3uFileInput');
+  const fullscreenBtn = document.getElementById('fullscreenBtn');
+  // Correction : le logo SVG n'a pas la classe .nguema5tv-text-3d, donc on ne l'utilise pas ici
+  // let nguemaLogo = playerContainer.querySelector('.nguema5tv-text-3d');
+  let savedLogos = JSON.parse(localStorage.getItem('channelLogos')) || {};
+  let currentlyPlayingItem = null;
+
+  function saveCurrentPlaylist() {
+    const channelItems = Array.from(channelList.getElementsByClassName('channel-item'));
+    const playlist = channelItems.map(item => ({
+      name: item.querySelector('span').textContent,
+      url: item.getAttribute('data-src'),
+      logo: item.querySelector('.channel-logo') ? item.querySelector('.channel-logo').src : ''
+    }));
+    localStorage.setItem('savedPlaylist', JSON.stringify(playlist));
+    localStorage.setItem('channelLogos', JSON.stringify(savedLogos));
+  }
+  function loadSavedPlaylist() {
+    const savedPlaylist = JSON.parse(localStorage.getItem('savedPlaylist'));
+    if (savedPlaylist) {
+      channelList.innerHTML = '';
+      savedPlaylist.forEach(channel => {
+        addChannelItem(channel.name, channel.url, channel.logo);
+      });
+    }
+  }
+  function toggleSidebar() {
+    sidebar.classList.toggle('hidden');
+    if (sidebar.classList.contains('hidden')) {
+      playerContainer.style.width = '100%';
+    } else {
+      playerContainer.style.width = '80%';
+    }
+  }
+  toggleButton.addEventListener('click', toggleSidebar);
+
+  function playChannel(src) {
+    const ext = src.split('.').pop().toLowerCase().split('?')[0];
+    const ffmpegExts = ['mkv', 'avi', 'mpg', 'mpeg', 'divx', 'ts', 'webm'];
+    
+    if (ffmpegExts.includes(ext)) {
+        playWithFFmpeg(src).catch(err => {
+            console.error(`Erreur dans playWithFFmpeg pour ${src}:`, err);
+        });
+    } else {
+        _playChannelInternal(src);
+    }
+  }
+
+  function _playChannelInternal(src) {
+    videoPlayer.src = '';
+    if (window.hls) {
+      window.hls.destroy();
+    }
+    // Détection de l'extension du flux
+    const ext = src.split('.').pop().toLowerCase().split('?')[0];
+    const hlsExts = ['m3u8'];
+    if (hlsExts.includes(ext) && Hls.isSupported()) {
+      const hls = new Hls({
+        debug: false,
+        enableWorker: true,
+        enableMP2TSDemuxing: true,
+        progressive: true,
+        lowLatencyMode: true,
+        backBufferLength: 60,
+        liveBackBufferLength: 90,
+        liveDurationInfinity: true,
+        highBufferWatchdogPeriod: 3,
+        maxBufferLength: 120,
+        maxMaxBufferLength: 600,
+        manifestLoadingTimeOut: 20000,
+        manifestLoadingMaxRetry: 3,
+        levelLoadingTimeOut: 20000,
+        levelLoadingMaxRetry: 3,
+        fragLoadingTimeOut: 30000,
+        fragLoadingMaxRetry: 4,
+        appendErrorMaxRetry: 5,
+        startLevel: -1,
+        abrEwmaDefaultEstimate: 500000,
+        abrBandWidthFactor: 0.85,
+        abrBandWidthUpFactor: 0.65,
+        abrMaxWithRealBitrate: true,
+        forceKeyFrameOnDiscontinuity: true,
+        maxBufferHole: 0.5,
+        maxFragLookUpTolerance: 0.25,
+        nudgeOffset: 0.1,
+        nudgeMaxRetry: 3,
+        maxStarvationDelay: 4,
+        maxSeekHole: 2,
+        stretchShortVideoTrack: true,
+        maxAudioFramesDrift: 1,
+        enableSoftwareAES: true,
+        enableDateRangeMetadataCues: true,
+        enableEmsgMetadataCues: true,
+        enableID3MetadataCues: true,
+        enableWebVTT: true,
+        enableIMSC1: true,
+        enableCEA708Captions: true,
+        captionsTextTrack1Label: 'French',
+        captionsTextTrack1LanguageCode: 'fr',
+        captionsTextTrack2Label: 'English',
+        captionsTextTrack2LanguageCode: 'en',
+        maxBufferSize: 60 * 1000 * 1000
+      });
+      window.hls = hls;
+      hls.loadSource(src);
+      hls.attachMedia(videoPlayer);
+      hls.on(Hls.Events.MANIFEST_PARSED, function () {
+        videoPlayer.play().then(() => {
+          console.log("Playback started successfully");
+        }).catch(function (error) {
+          console.log("Play failed:", error);
+          videoPlayer.muted = true;
+          return videoPlayer.play();
+        });
+      });
+      hls.on(Hls.Events.ERROR, function (event, data) {
+        if (data.fatal) {
+          switch (data.type) {
+            case Hls.ErrorTypes.NETWORK_ERROR:
+              console.log("Network error, trying to recover...");
+              hls.startLoad();
+              break;
+            case Hls.ErrorTypes.MEDIA_ERROR:
+              console.log("Media error, trying to recover...");
+              hls.recoverMediaError();
+              break;
+            default:
+              console.log("Unrecoverable error");
+              hls.destroy();
+              break;
+          }
+        } else {
+          switch(data.details) {
+            case Hls.ErrorDetails.FRAG_PARSING_ERROR:
+                console.error("Fragment parsing error:", data.reason);
+                hls.recoverMediaError();
+                break;
+            case Hls.ErrorDetails.BUFFER_STALLED_ERROR:
+              console.log("Buffer stalled, attempting to recover...");
+              hls.trigger(Hls.Events.BUFFER_FLUSHING);
+              break;
+            case Hls.ErrorDetails.BUFFER_FULL_ERROR:
+              console.log("Buffer full, flushing...");
+              hls.trigger(Hls.Events.BUFFER_FLUSHING);
+              break;
+            default:
+              console.log("Non-fatal error:", data.details);
+          }
+        }
+      });
+      hls.on(Hls.Events.FRAG_LOADED, function(event, data) {
+        console.log("Fragment loaded successfully");
+      });
+      hls.on(Hls.Events.LEVEL_SWITCHED, function(event, data) {
+        console.log("Quality level switched to " + data.level);
+      });
+      hls.on(Hls.Events.BUFFER_APPENDED, function(event, data) {
+        console.log("Buffer appended");
+      });
+      hls.on(Hls.Events.FPS_DROP, function(event, data) {
+        console.log("FPS drop detected");
+        if (data.currentDropped > 10) {
+          hls.nextLevel = hls.currentLevel - 1;
+        }
+      });
+    } else {
+      // Pour tous les autres formats, on laisse le navigateur gérer
+      videoPlayer.src = src;
+      videoPlayer.load();
+      videoPlayer.addEventListener('loadedmetadata', function onLoaded() {
+        videoPlayer.removeEventListener('loadedmetadata', onLoaded);
+        videoPlayer.play().catch(function (error) {
+          console.log("Play failed:", error);
+          videoPlayer.muted = true;
+          videoPlayer.play();
+        });
+      });
+    }
+    if (window.innerWidth <= 768) {
+      toggleSidebar();
+    }
+    if (currentlyPlayingItem) {
+      currentlyPlayingItem.classList.remove('playing');
+    }
+    const currentItem = document.querySelector(`.channel-item[data-src="${src}"]`);
+    if (currentItem) {
+      currentItem.classList.add('playing');
+      currentlyPlayingItem = currentItem;
+    }
+  }
+
+  function addChannelItem(name, src, logoUrl) {
+    const channelItem = document.createElement('div');
+    channelItem.className = 'channel-item';
+    const savedLogoUrl = savedLogos[src] || logoUrl;
+    if (savedLogoUrl) {
+      const logo = document.createElement('img');
+      logo.src = savedLogoUrl;
+      logo.alt = `Logo ${name}`;
+      logo.className = 'channel-logo';
+      channelItem.appendChild(logo);
+    }
+    const channelName = document.createElement('span');
+    channelName.textContent = name;
+    channelItem.appendChild(channelName);
+    const playIcon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    playIcon.classList.add('play-icon');
+    playIcon.setAttribute('viewBox', '0 0 24 24');
+    playIcon.innerHTML = '<path d="M8 5v14l11-7z"/>';
+    channelItem.appendChild(playIcon);
+    channelItem.setAttribute('data-src', src);
+    channelItem.addEventListener('click', function () {
+      playChannel(src);
+    });
+    channelList.appendChild(channelItem);
+    saveCurrentPlaylist();
+  }
+  function loadChannelsFromM3U(url) {
+    fetch(url).then(response => response.text()).then(data => {
+      channelList.innerHTML = '';
+      const lines = data.split('\n');
+      let currentName = '';
+      let currentUrl = '';
+      let currentLogo = '';
+      lines.forEach(line => {
+        if (line.startsWith('#EXTINF:')) {
+          const match = line.match(/tvg-logo="([^"]*)"[^,]*,(.+)/);
+          if (match) {
+            currentLogo = match[1];
+            currentName = match[2].trim();
+          } else {
+            const nameParts = line.split(',');
+            if (nameParts.length > 1) {
+              currentName = nameParts[1].trim();
+            }
+          }
+        } else if (line.startsWith('http')) {
+          currentUrl = line.trim();
+          addChannelItem(currentName, currentUrl, currentLogo);
+          currentName = '';
+          currentUrl = '';
+          currentLogo = '';
+        }
+      });
+      saveCurrentPlaylist();
+    }).catch(error => console.error('Erreur lors du chargement du fichier M3U:', error));
+  }
+  function parseM3UAndAddChannels(content) {
+    const lines = content.split('\n');
+    let currentName = '';
+    let currentUrl = '';
+    let currentLogo = '';
+    channelList.innerHTML = '';
+    lines.forEach(line => {
+      if (line.startsWith('#EXTINF:')) {
+        const match = line.match(/tvg-logo="([^"]*)"[^,]*,(.+)/);
+        if (match) {
+          currentLogo = match[1];
+          currentName = match[2].trim();
+        } else {
+          const nameParts = line.split(',');
+          if (nameParts.length > 1) {
+            currentName = nameParts[1].trim();
+          }
+        }
+      } else if (line.startsWith('http')) {
+        currentUrl = line.trim();
+        addChannelItem(currentName, currentUrl, currentLogo);
+        currentName = '';
+        currentUrl = '';
+        currentLogo = '';
+      }
+    });
+    saveCurrentPlaylist();
+  }
+  loadSavedPlaylist();
+  channelList.addEventListener('click', function (e) {
+    if (e.target.classList.contains('channel-item') || e.target.closest('.channel-item')) {
+      const channelItem = e.target.classList.contains('channel-item') ? e.target : e.target.closest('.channel-item');
+      playChannel(channelItem.getAttribute('data-src'));
+    }
+  });
+  searchInput.addEventListener('input', function () {
+    const searchTerm = this.value.toLowerCase();
+    const channelItems = channelList.getElementsByClassName('channel-item');
+    Array.from(channelItems).forEach(item => {
+      const channelName = item.textContent.toLowerCase();
+      if (channelName.includes(searchTerm)) {
+        item.style.display = 'flex';
+      } else {
+        item.style.display = 'none';
+      }
+    });
+  });
+  function addLogoToChannel(channelItem) {
+    const logoUrl = prompt("Entrez l'URL du logo de la chaîne :");
+    if (logoUrl) {
+      let logo = channelItem.querySelector('.channel-logo');
+      if (!logo) {
+        logo = document.createElement('img');
+        logo.className = 'channel-logo';
+        channelItem.insertBefore(logo, channelItem.firstChild);
+      }
+      logo.src = logoUrl;
+      logo.alt = "Logo de la chaîne";
+      const channelSrc = channelItem.getAttribute('data-src');
+      savedLogos[channelSrc] = logoUrl;
+      localStorage.setItem('channelLogos', JSON.stringify(savedLogos));
+      saveCurrentPlaylist();
+    }
+  }
+  function renameChannel(channelItem) {
+    const nameSpan = channelItem.querySelector('span');
+    const newName = prompt("Entrez le nouveau nom de la chaîne :", nameSpan.textContent);
+    if (newName) {
+      nameSpan.textContent = newName;
+      saveCurrentPlaylist();
+    }
+  }
+  function deleteChannel(channelItem) {
+    if (confirm("Êtes-vous sûr de vouloir supprimer cette chaîne ?")) {
+      const channelSrc = channelItem.getAttribute('data-src');
+      delete savedLogos[channelSrc];
+      localStorage.setItem('channelLogos', JSON.stringify(savedLogos));
+      channelItem.remove();
+      saveCurrentPlaylist();
+    }
+  }
+  channelList.addEventListener('contextmenu', function (e) {
+    e.preventDefault();
+    if (e.target.classList.contains('channel-item') || e.target.parentElement.classList.contains('channel-item')) {
+      const channelItem = e.target.classList.contains('channel-item') ? e.target : e.target.parentElement;
+      contextMenu.style.display = 'block';
+      contextMenu.style.left = `${e.pageX}px`;
+      contextMenu.style.top = `${e.pageY}px`;
+      contextMenu.setAttribute('data-target', channelItem.getAttribute('data-src'));
+    }
+  });
+  document.addEventListener('click', function () {
+    contextMenu.style.display = 'none';
+  });
+  addLogoItem.addEventListener('click', function () {
+    const targetSrc = contextMenu.getAttribute('data-target');
+    const channelItem = document.querySelector(`.channel-item[data-src="${targetSrc}"]`);
+    if (channelItem) {
+      addLogoToChannel(channelItem);
+    }
+    contextMenu.style.display = 'none';
+  });
+  renameChannelItem.addEventListener('click', function () {
+    const targetSrc = contextMenu.getAttribute('data-target');
+    const channelItem = document.querySelector(`.channel-item[data-src="${targetSrc}"]`);
+    if (channelItem) {
+      renameChannel(channelItem);
+    }
+    contextMenu.style.display = 'none';
+  });
+  deleteChannelItem.addEventListener('click', function () {
+    const targetSrc = contextMenu.getAttribute('data-target');
+    const channelItem = document.querySelector(`.channel-item[data-src="${targetSrc}"]`);
+    if (channelItem) {
+      deleteChannel(channelItem);
+    }
+    contextMenu.style.display = 'none';
+  });
+
+  /* NGUEMA5TV FFMPEG JS INTEGRATION START */
+  const { createFFmpeg, fetchFile } = FFmpeg;
+  const ffmpeg = createFFmpeg({
+    log: true
+  });
+  let ffmpegLoaded = false;
+
+  async function playWithFFmpeg(src) {
+    const loadingOverlay = document.createElement('div');
+    loadingOverlay.style.position = 'absolute';
+    loadingOverlay.style.top = '0';
+    loadingOverlay.style.left = '0';
+    loadingOverlay.style.width = '100%';
+    loadingOverlay.style.height = '100%';
+    loadingOverlay.style.backgroundColor = 'rgba(0,0,0,0.7)';
+    loadingOverlay.style.color = 'white';
+    loadingOverlay.style.display = 'flex';
+    loadingOverlay.style.justifyContent = 'center';
+    loadingOverlay.style.alignItems = 'center';
+    loadingOverlay.style.zIndex = '5000';
+    loadingOverlay.innerHTML = '<h2>Initialisation...</h2>';
+    playerContainer.appendChild(loadingOverlay);
+
+    try {
+      if (!ffmpegLoaded) {
+        loadingOverlay.innerHTML = '<h2>Chargement du moteur de conversion (première utilisation)...</h2>';
+        await ffmpeg.load();
+        ffmpegLoaded = true;
+      }
+
+      const inputFilename = `input.${src.split('.').pop().toLowerCase().split('?')[0]}`;
+      const outputFilename = 'output.mp4';
+      
+      loadingOverlay.innerHTML = '<h2>Téléchargement de la vidéo...</h2>';
+      ffmpeg.FS('writeFile', inputFilename, await fetchFile(src));
+      
+      loadingOverlay.innerHTML = '<h2>Conversion de la vidéo... (ceci peut prendre du temps)</h2>';
+      await ffmpeg.run('-i', inputFilename, '-preset', 'ultrafast', '-c:v', 'libx264', '-c:a', 'aac', outputFilename);
+      
+      loadingOverlay.innerHTML = '<h2>Lecture...</h2>';
+      const data = ffmpeg.FS('readFile', outputFilename);
+      
+      ffmpeg.FS('unlink', inputFilename);
+      ffmpeg.FS('unlink', outputFilename);
+
+      if (window.hls) {
+        window.hls.destroy();
+      }
+      const url = URL.createObjectURL(new Blob([data.buffer], { type: 'video/mp4' }));
+      
+      // Mettre à jour le lecteur
+      if (currentlyPlayingItem) {
+        currentlyPlayingItem.classList.remove('playing');
+      }
+      const currentItem = document.querySelector(`.channel-item[data-src="${src}"]`);
+      if (currentItem) {
+        currentItem.classList.add('playing');
+        currentlyPlayingItem = currentItem;
+      }
+
+      videoPlayer.src = url;
+      videoPlayer.load();
+      videoPlayer.play().catch(e => {
+        console.error("Erreur de lecture après conversion:", e);
+        videoPlayer.muted = true;
+        videoPlayer.play();
+      });
+
+    } catch (error) {
+        console.error('Erreur avec FFMPEG:', error);
+        loadingOverlay.innerHTML = `<h2>Erreur lors de la conversion.</h2><p style="font-size: 12px; white-space: pre-wrap;">${error.message}</p>`;
+        setTimeout(() => loadingOverlay.remove(), 5000);
+        return;
+    } finally {
+        if(loadingOverlay.parentElement) {
+            loadingOverlay.remove();
+        }
+    }
+  }
+  /* NGUEMA5TV FFMPEG JS INTEGRATION END */
+
+  m3uFileInput.addEventListener('change', function (e) {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        const content = e.target.result;
+        parseM3UAndAddChannels(content);
+      };
+      reader.readAsText(file);
+    }
+  });
+  document.getElementById('importM3uLink').addEventListener('click', function () {
+    const m3uUrl = prompt("Entrez l'URL du fichier M3U:");
+    if (m3uUrl) {
+      loadChannelsFromM3U(m3uUrl);
+    }
+  });
+  function playFirstChannel() {
+    const firstChannel = channelList.querySelector('.channel-item');
+    if (firstChannel) {
+      firstChannel.classList.add('playing');
+      currentlyPlayingItem = firstChannel;
+    }
+  }
+  welcomeMessage.style.display = 'flex';
+  welcomeMessage.style.opacity = '1';
+  setTimeout(() => {
+    welcomeMessage.style.opacity = '0';
+    setTimeout(() => {
+      welcomeMessage.style.display = 'none';
+      playFirstChannel();
+    }, 500);
+  }, 5000);
+  fullscreenBtn.addEventListener('click', function () {
+    if (!document.fullscreenElement) {
+      if (playerContainer.requestFullscreen) {
+        playerContainer.requestFullscreen();
+      } else if (playerContainer.webkitRequestFullscreen) {
+        playerContainer.webkitRequestFullscreen();
+      } else if (playerContainer.msRequestFullscreen) {
+        playerContainer.msRequestFullscreen();
+      }
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+      } else if (document.msExitFullscreen) {
+        document.msExitFullscreen();
+      }
+    }
+  });
+
+  let fullscreenBtnTimeout;
+  function showFullscreenBtn() {
+    fullscreenBtn.style.opacity = '1';
+    fullscreenBtn.style.pointerEvents = 'auto';
+    fullscreenBtn.style.display = 'flex';
+    if (fullscreenBtnTimeout) clearTimeout(fullscreenBtnTimeout);
+    fullscreenBtnTimeout = setTimeout(() => {
+      if (document.fullscreenElement === playerContainer) {
+        fullscreenBtn.style.opacity = '0';
+        fullscreenBtn.style.pointerEvents = 'none';
+        fullscreenBtn.style.display = 'none';
+      }
+    }, 2000);
+  }
+  function hideFullscreenBtn() {
+    fullscreenBtn.style.opacity = '0';
+    fullscreenBtn.style.pointerEvents = 'none';
+    fullscreenBtn.style.display = 'none';
+  }
+
+  document.addEventListener('fullscreenchange', function () {
+    if (document.fullscreenElement === playerContainer) {
+      playerContainer.classList.add('fullscreen');
+      fullscreenBtn.classList.add('fullscreen-btn-on');
+      // Masquer immédiatement le bouton en plein écran
+      hideFullscreenBtn();
+      // Ajouter l'écouteur de mouvement de souris
+      playerContainer.addEventListener('mousemove', showFullscreenBtn);
+    } else {
+      playerContainer.classList.remove('fullscreen');
+      fullscreenBtn.classList.remove('fullscreen-btn-on');
+      // Afficher le bouton hors plein écran
+      fullscreenBtn.style.opacity = '1';
+      fullscreenBtn.style.pointerEvents = 'auto';
+      fullscreenBtn.style.display = 'flex';
+      // Retirer l'écouteur
+      playerContainer.removeEventListener('mousemove', showFullscreenBtn);
+      if (fullscreenBtnTimeout) clearTimeout(fullscreenBtnTimeout);
+    }
+  });
+});</script>
+</body></html>
