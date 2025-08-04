@@ -1,0 +1,11 @@
+export const musicChannels = [
+    { "name": "TRACE URBAN", "logo": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/trace-urban-fr.png", "src": "https://amg01131-tracetv-traceurbanuk-samsunguk-6r213.amagi.tv/playlist/amg01131-tracetv-traceurbanuk-samsunguk/playlist.m3u8" },
+    { "name": "VEVO", "logo": "https://images.samsung.com/is/image/samsung/assets/fr/smart-tv/samsung-tv-plus/all-channels/update-030723/VEVEO-90s-00s.png?$330_186_PNG$", "src": "https://d2q982f39qtdzh.cloudfront.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d1/cc-np9jnkbfjxrog/Vevo90and2000_FR.m3u8" },
+    { "name": "VEVO HIP HOP", "logo": "https://tvpdotcomdynamiclogopeu.samsungcloud.tv/resize?url=https://tvpnlogopeu.samsungcloud.tv/platform/image/sourcelogo/vc/00/02/34/FRBC2100002JA_20241015T040410SQUARE.png&h=250", "src": "https://d3mzlmrngyf08j.cloudfront.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d1/cc-55k4m9whplndi/playlist.m3u8" },
+    { "name": "VEVO POP", "logo": "https://images.viaway.com/26295749_180.png", "src": "https://d3vxz540ozij3t.cloudfront.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d1/cc-lv1qzgyv0ee39/playlist.m3u8" },
+    { "name": "GENERATIONS TV", "logo": "https://generations.fr/media/option/logo.webp", "src": "https://generation-tv.vedge.infomaniak.com/livecast/generation-tv/manifest.m3u8" },
+    { "name": "ZOUKLA TV", "logo": "https://www.telezoukla.com/gallery_gen/354e5710b3a20b6ec2a926cfffe15241_414x152_fit.png", "src": "https://vdo.pro-fhi.net:3228/stream/play.m3u8" },
+    { "name": "RADIO CONTACT", "logo": "https://tse2.mm.bing.net/th/id/OIP.MI43TZNzO3I8BwcOUANh_AHaDq?r=0&w=277&h=182&rs=1&pid=ImgDetMain&o=7&rm=3", "src": "https://contact-live-hls.akamaized.net/hls/live/2038650/CONTACT-Live-HLS/master.m3u8" },
+    { "name": "PTV", "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Logo_PTV_2022.png/225px-Logo_PTV_2022.png", "src": "https://puissancetelevision.vedge.infomaniak.com/livecast/ik:puissancetelevision/manifest.m3u8" },
+    { "name": "CSTAR", "logo": "https://vialmtv.tv/wp-content/uploads/2022/02/61fa341ac1678-1024x576.jpeg", "src": "https://raw.githubusercontent.com/schumijo/iptv/main/playlists/canalplus/cstar.m3u8" }
+];

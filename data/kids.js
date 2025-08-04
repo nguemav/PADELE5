@@ -1,0 +1,8 @@
+export const kidsChannels = [
+    { "name": "GULLI", "logo": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/gulli-fr.png", "src": "https://origin-caf900c010ea8046.live.6cloud.fr/out/v1/c65696b42ca34e97a9b5f54758d6dd50/cmaf/hlsfmp4_short_q2hyb21h_gulli_sd_index.m3u8" },
+    { "name": "JAPANIME", "logo": "https://static-cdn.jtvnw.net/jtv_user_pictures/6b97e19f-4243-4d48-b794-ff8cf54d795f-profile_image-300x300.png", "src": "https://foxkidstv.be:3369/stream/play.m3u8" },
+    { "name": "ADN", "logo": "https://tvpnlogopeu.samsungcloud.tv/platform/image/sourcelogo/vc/00/02/34/FRBD5100001ZA_20240214T035741SQUARE.png_20240214035742.png", "src": "https://d3b73b34o7cvkq.cloudfront.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d1/cc-gz2sgqzp076kf/adn.m3u8" },
+    { "name": "SUPERTOON", "logo": "https://tvpdotcomdynamiclogopeu.samsungcloud.tv/resize?url=https://tvpnlogopeu.samsungcloud.tv/platform/image/sourcelogo/vc/00/02/34/FRBD5100002NL_20241030T154340SQUARE.png&h=250", "src": "https://jmp2.uk/sam-FRBD5100002NL.m3u8" },
+    { "name": "GONG", "logo": "https://i.ibb.co/MMpFXQL/gong.jpg", "src": "https://cdn-uw2-prod.tsv2.amagi.tv/linear/amg01596-gongnetworks-gong-samsungfr/playlist.m3u8" },
+    { "name": "TELETOON", "logo": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/teletoon-plus-1-fr.png", "src": "http://4kplus.info/live/02092021iptv/pwqopprrct/300.m3u8" }
+];

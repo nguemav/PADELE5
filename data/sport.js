@@ -1,0 +1,17 @@
+export const sportChannels = [
+    { "name": "RMC SPORT1", "logo": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/rmc-sport-1-fr.png", "src": "http://4kplus.info/live/02092021iptv/pwqopprrct/234.m3u8" },
+    { "name": "RMC SPORT2", "logo": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/rmc-sport-2-fr.png", "src": "http://4kplus.info/live/02092021iptv/pwqopprrct/235.m3u8" },
+    { "name": "RMC SPORT3", "logo": "https://seeklogo.com/images/R/rmc-sport-3-logo-56F8F455A3-seeklogo.com.png", "src": "http://6f1f83d9.akadatel.com/iptv/ET85VGCD8YTWLC/2503/index.m3u8" },
+    { "name": "BEIN SPORT1", "logo": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/bein-sports-1-french-fr.png", "src": "http://4kplus.info/live/02092021iptv/pwqopprrct/227.m3u8" },
+    { "name": "BEIN SPORT2", "logo": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/bein-sports-2-french-fr.png", "src": "http://6f1f83d9.akadatel.com/iptv/ET85VGCD8YTWLC/2499/index.m3u8" },
+    { "name": "BEIN SPORT3", "logo": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/bein-sports-3-french-fr.png", "src": "http://6f1f83d9.akadatel.com/iptv/ET85VGCD8YTWLC/2500/index.m3u8" },
+    { "name": "BEIN SPORT1 HD+", "logo": "https://logowik.com/content/uploads/images/bein-sports-13097.logowik.com.webp", "src": "http://6f1f83d9.akadatel.com/iptv/ET85VGCD8YTWLC/2499/index.m3u8" },
+    { "name": "EUROSPORT1", "logo": "https://tse4.mm.bing.net/th/id/OIP.rJqOwfsXTaKdut2-nTiG0wAAAA?r=0&w=277&h=182&rs=1&pid=ImgDetMain&o=7&rm=3", "src": "http://ghost1.tv/vipvip01910191/102030405060/80527" },
+    { "name": "EUROSPORT2", "logo": "https://tse4.mm.bing.net/th/id/OIP.rJqOwfsXTaKdut2-nTiG0wAAAA?r=0&w=277&h=182&rs=1&pid=ImgDetMain&o=7&rm=3", "src": "http://dksip.com/live/awadalali/1497494946/42093.ts" },
+    { "name": "CANAL+SPORT", "logo": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/hd/canal-plus-sport-hd-fr.png", "src": "http://4kplus.info/live/02092021iptv/pwqopprrct/250.m3u8" },
+    { "name": "WOMAN'S SPORT NETWORK", "logo": "https://tse3.mm.bing.net/th/id/OIP.ds0q0FC4Iq3DNsyHAj7AlgAAAA?r=0&rs=1&pid=ImgDetMain&o=7&rm=3", "src": "https://amg01416-faststudios-womensnetwork-plex-rzxxu.amagi.tv/playlist/amg01416-faststudios-womensnetwork-plex/playlist.m3u8" },
+    { "name": "MOTORVISION", "logo": "https://i.ibb.co/0YKFn02/motorvisionfrs.png", "src": "https://d1qswsont218xa.cloudfront.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d1/cc-im2kwho8ev6jk/mv_fr.m3u8" },
+    { "name": "DRIVE TV", "logo": "https://tvradiozap.eu/tv/logos/drivetv.png", "src": "https://amg01796-amg01796c2-rakuten-uk-3887.playouts.now.amagi.tv/playlist/amg01796-fastmediafast-drivetv-rakutenuk/playlist.m3u8" },
+    { "name": "MOTOR RACING", "logo": "https://tvpnlogopeu.samsungcloud.tv/platform/image/sourcelogo/vc/00/02/34/FRBD4100013LN_20231115T012253SQUARE.png_20231115012254.png", "src": "https://d1j1h1zdadb91f.cloudfront.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d1/cc-50l4tj8p1zx6l/moto.m3u8" },
+    { "name": "RMC MECANIC", "logo": "https://static-cdn.tv.sfr.net/data/img/apps/edito/attachment/animation/tile/imgrectangle1920RMCMecanicmin.jpg", "src": "https://d31lyfwi8gzfyr.cloudfront.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d1/cc-ebepfdmg74kzh/RMC_MECANIC_FR.m3u8" }
+];

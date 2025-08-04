@@ -1,0 +1,7 @@
+export const informationChannels = [
+    { "name": "FRANCE 24", "logo": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/france-24-fr.png", "src": "https://live.france24.com/hls/live/2037179/F24_FR_HI_HLS/master_5000.m3u8" },
+    { "name": "LCI", "logo": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/lci-fr.png", "src": "https://raw.githubusercontent.com/ipstreet312/freeiptv/master/ressources/btv/py/lci1.m3u8" },
+    { "name": "TV5 MONDE INFO", "logo": "https://tse3.mm.bing.net/th/id/OIP.5gMoBB7EQgjGk_6Nc7dS1wHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3", "src": "https://d161b1o6wfc5a3.cloudfront.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d1/cc-3u7sgewc3l8ri/tvfm.m3u8" },
+    { "name": "FRANCE INFO", "logo": "https://tse2.mm.bing.net/th/id/OIP.cDDBEED8qDJYPbbYRMRPaQHaEv?r=0&rs=1&pid=ImgDetMain&o=7&rm=3", "src": "https://raw.githubusercontent.com/Paradise-91/ParaTV/refs/heads/main/streams/francetv/franceinfo.m3u8" },
+    { "name": "BFM2", "logo": "https://tse2.mm.bing.net/th/id/OIP.2NdL9OIDo6zYRHLbWR9QSAHaEK?r=0&rs=1&pid=ImgDetMain&o=7&rm=3", "src": "https://live-cdn-bfm2-euw1.bfmtv.bct.nextradiotv.com/m5/media.m3u8?bpkio_serviceid=7de32147a4f1055b8812bbac92a24d2e" }
+];

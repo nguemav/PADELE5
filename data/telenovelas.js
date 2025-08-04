@@ -1,0 +1,8 @@
+export const telenovelasChannels = [
+    { "name": "NOVELA STROMCAST", "logo": "https://i.ibb.co/V3pfjfB/novela-channel-telepack.jpg", "src": "https://stormcast-telenovelatv-1-fr.samsung.wurl.tv/playlist.m3u8" },
+    { "name": "PASSION NOVELAS", "logo": "https://i.imgur.com/boo9jmf.png", "src": "https://d219tvyafu2vka.cloudfront.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d1/cc-csm4hzxgjueax/index.m3u8" },
+    { "name": "FREQUENCE NOVELS", "logo": "https://tvpdotcomdynamiclogopeu.samsungcloud.tv/resize?url=https://tvpnlogopeu.samsungcloud.tv/platform/image/sourcelogo/vc/00/02/34/FRBC800001X0_20241025T153329SQUARE.png", "src": "https://d20oth1416y9a1.cloudfront.net/playlist/amg00711-zylofast-frequencenovelas-rakutenus/playlist.m3u8" },
+    { "name": "TELEVISA TELENOVELA", "logo": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/novelas-tv-fr.png?raw=true", "src": "https://40413a8d4fab4568b22187b5d7cd15c9.mediatailor.us-east-1.amazonaws.com/v1/master/44f73ba4d03e9607dcd9bebdcb8494d86964f1d8/Samsung-fr_Televisa/playlist.m3u8" },
+    { "name": "PASSION BOLLYWOOD", "logo": "https://yt3.googleusercontent.com/ytc/AGIKgqOkep4zvUMCfse-kvKGd3xDq5HQdsi9fsmLr73LWQ=s176-c-k-c0x00ffffff-no-rj", "src": "https://fast-rakuten.okast.tv/fa2e8c4385712f9a9a653242c406e725/channels/2888294c-5918-42f6-a2bd-91d49b26634c/03bc9e11-13bd-4a07-ba09-0586d910741d/PassionBollywood_FR.m3u8" },
+    { "name": "ZEE ONE", "logo": "https://www.kindpng.com/picc/m/392-3928437_thumb-image-zee-one-logo-png-transparent-png.png", "src": "https://87e3eec452134557a82da031f54a1899.mediatailor.us-east-1.amazonaws.com/v1/master/44f73ba4d03e9607dcd9bebdcb8494d86964f1d8/RakutenTV-fr_ZeeMagic/playlist.m3u8" }
+];
