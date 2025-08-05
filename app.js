@@ -1,6 +1,7 @@
 import { channels } from 'channels';
 import { initializePlayer } from './player.js';
 import { initializeUI } from './ui.js';
+import { initializeMcpClient } from './mcp-config.js';
 
 document.addEventListener('DOMContentLoaded', function () {
     try {
@@ -25,6 +26,9 @@ document.addEventListener('DOMContentLoaded', function () {
             if (appContainer) {
                 appContainer.style.display = 'flex';
             }
+
+            // Initialize MCP client logic based on the new config file
+            initializeMcpClient();
 
             const player = initializePlayer();
             initializeUI(channels, player);
