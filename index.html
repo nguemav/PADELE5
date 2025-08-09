@@ -1,49 +1,74 @@
-<html lang="fr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lecteur IPTV</title>
-    <link href="https://vjs.zencdn.net/8.12.0/video-js.css" rel="stylesheet" />
+    <title>WebTV Player</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <script type="importmap">
-    {
-      "imports": {
-        "channels": "./channels.js",
-        "data/general": "./data/general.js",
-        "data/cinemaSeries": "./data/cinemaSeries.js",
-        "data/telenovelas": "./data/telenovelas.js",
-        "data/information": "./data/information.js",
-        "data/discovery": "./data/discovery.js",
-        "data/music": "./data/music.js",
-        "data/kids": "./data/kids.js",
-        "data/sport": "./data/sport.js",
-        "data/international": "./data/international.js",
-        "data/lifestyle": "./data/lifestyle.js"
+      {
+        "imports": {
+          "marked": "https://cdn.jsdelivr.net/npm/marked/lib/marked.esm.js",
+          "dompurify": "https://cdn.jsdelivr.net/npm/dompurify/dist/purify.es.min.js"
+        }
       }
-    }
     </script>
 </head>
 <body>
     <div id="splash-screen">
-        <div id="splash-logo">NGUEMA5TV</div>
+        <img src="nguema5tv_logo.png" alt="NGUEMA5TV Logo">
     </div>
-    <div id="app-container">
-        <div id="sidebar">
-            <div id="search-container">
-                <input type="text" id="search-input" placeholder="Rechercher une chaîne...">
-            </div>
-            <div id="channel-list">
-                <!-- Les chaînes sont maintenant injectées par script.js -->
+
+    <header>
+        <div class="header-content">
+            <img src="nguema5tv_logo.png" alt="NGUEMA5TV Logo" class="header-logo">
+            <div class="search-container">
+                <input type="search" id="search-input" placeholder="Search channels...">
             </div>
         </div>
-        <div id="player-container">
-            <div id="logo">NGUEMA5TV</div>
-            <video id="video-player" class="video-js vjs-default-skin" controls autoplay preload="auto"></video>
-            <button id="fullscreen-btn" title="Plein écran"></button>
+    </header>
+
+    <main>
+        <div id="channel-grid">
+            <!-- Channels will be injected here by JavaScript -->
+        </div>
+        <p id="no-results" class="hidden">No channels found.</p>
+    </main>
+
+    <footer>
+        <p>©2024 WebTV Player</p>
+    </footer>
+
+    <!-- Video Player Modal -->
+    <div id="video-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="player-channel-title"></h2>
+                <button id="close-modal-btn" class="close-button">&times;</button>
+            </div>
+            <div class="video-container">
+                <video id="video-player" controls autoplay></video>
+            </div>
+            <div class="player-controls-wrapper">
+                <div class="stream-controls">
+                    <p>Stream source:</p>
+                    <div id="stream-buttons">
+                        <!-- Stream source buttons will be injected here -->
+                    </div>
+                </div>
+                 <div id="audio-track-controls" class="stream-controls hidden">
+                    <p>Audio track:</p>
+                    <div id="audio-track-buttons">
+                        <!-- Audio track buttons will be injected here -->
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-    <script src="https://vjs.zencdn.net/8.12.0/video.js"></script>
-    <script src="mcp-config.js" type="module"></script>
-    <script src="app.js" type="module"></script>
+
+    <script type="module" src="script.js"></script>
 </body>
 </html>
