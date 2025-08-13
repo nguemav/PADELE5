@@ -1,3 +1,5 @@
+import { channels } from './channels.js';
+
 const channelGrid = document.getElementById('channel-grid');
 const searchInput = document.getElementById('search-input');
 const noResults = document.getElementById('no-results');
