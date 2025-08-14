@@ -11,21 +11,6 @@ const audioTrackButtonsContainer = document.getElementById('audio-track-buttons'
 const splashScreen = document.getElementById('splash-screen');
 
 let hls;
-let channels = []; // To store channels after fetching
-
-async function loadChannels() {
-    try {
-        const response = await fetch('channels.json');
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        channels = await response.json();
-        renderChannels(channels);
-    } catch (error) {
-        console.error("Could not load channel data:", error);
-        channelGrid.innerHTML = '<p style="color: var(--secondary-text); text-align: center;">Error loading channels. Please try again later.</p>';
-    }
-}
 
 function renderChannels(channelList) {
     channelGrid.innerHTML = '';
@@ -186,8 +171,8 @@ window.addEventListener('load', () => {
         setTimeout(() => {
             splashScreen.style.display = 'none';
         }, 500); // This should match the transition duration in CSS
-    }, 2000); // Reduced splash screen time to 2 seconds
+    }, 5000); // 5 seconds
 
-    // Initial load
-    loadChannels();
+    // Initial render
+    renderChannels(channels);
 });
