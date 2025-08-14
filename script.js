@@ -1,5 +1,3 @@
-import { channels } from './channels.js';
-
 const channelGrid = document.getElementById('channel-grid');
 const searchInput = document.getElementById('search-input');
 const noResults = document.getElementById('no-results');
@@ -13,6 +11,21 @@ const audioTrackButtonsContainer = document.getElementById('audio-track-buttons'
 const splashScreen = document.getElementById('splash-screen');
 
 let hls;
+let channels = []; // To store channels after fetching
+
+async function loadChannels() {
+    try {
+        const response = await fetch('channels.json');
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        channels = await response.json();
+        renderChannels(channels);
+    } catch (error) {
+        console.error("Could not load channel data:", error);
+        channelGrid.innerHTML = '<p style="color: var(--secondary-text); text-align: center;">Error loading channels. Please try again later.</p>';
+    }
+}
 
 function renderChannels(channelList) {
     channelGrid.innerHTML = '';
@@ -173,8 +186,8 @@ window.addEventListener('load', () => {
         setTimeout(() => {
             splashScreen.style.display = 'none';
         }, 500); // This should match the transition duration in CSS
-    }, 5000); // 5 seconds
+    }, 2000); // Reduced splash screen time to 2 seconds
 
-    // Initial render
-    renderChannels(channels);
+    // Initial load
+    loadChannels();
 });
