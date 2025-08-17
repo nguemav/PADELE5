@@ -1,97 +1,62 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WebTV Player</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-    <script type="importmap">
-      {
-        "imports": {
-          "marked": "https://cdn.jsdelivr.net/npm/marked/lib/marked.esm.js",
-          "dompurify": "https://cdn.jsdelivr.net/npm/dompurify/dist/purify.es.min.js"
-        }
-      }
-    </script>
+    <title>NGUEMA5TV - Live</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="logo.png">
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 </head>
 <body>
-    <div id="splash-screen">
-        <img src="nguema5tv_logo.png" alt="NGUEMA5TV Logo">
-    </div>
-
     <header>
-        <div class="header-content">
-            <img src="nguema5tv_logo.png" alt="NGUEMA5TV Logo" class="header-logo">
-            <div class="search-container">
-                <input type="search" id="search-input" placeholder="Search channels...">
-            </div>
+        <div class="logo-container">
+            <img src="logo.png" alt="NGUEMA5TV Logo" class="logo">
+            <h1>NGUEMA5TV</h1>
         </div>
     </header>
 
     <main>
-        <div id="channel-grid">
-            <!-- Channels will be injected here by JavaScript -->
+        <div class="main-content">
+            <div class="video-container">
+                <div id="loading-overlay">
+                    <div class="spinner"></div>
+                    <p>Loading Stream...</p>
+                </div>
+                <video id="videoPlayer" controls autoplay></video>
+            </div>
+            <aside class="playlist-sidebar">
+                <h2>Playlist</h2>
+                <div class="playlist-loader">
+                    <input type="file" id="m3u-file-input" accept=".m3u,.m3u8">
+                    <button id="load-m3u-btn">Load</button>
+                </div>
+                <div class="search-container">
+                    <input type="text" id="search-input" placeholder="Search channels...">
+                </div>
+                <div id="channel-list-container">
+                    <!-- Channels will be populated here by script.js -->
+                </div>
+                 <div class="playlist-status">
+                    <p id="playlist-status-message"></p>
+                </div>
+            </aside>
         </div>
-        <p id="no-results" class="hidden">No channels found.</p>
     </main>
-
-    <footer>
-        <p>©2024 NGUEMA5TV</p>
-    </footer>
-
-    <!-- Video Player Modal -->
-    <div id="video-modal" class="modal-overlay hidden">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 id="player-channel-title"></h2>
-                <button id="close-modal-btn" class="close-button">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="video-section">
-                    <div class="video-container">
-                        <video id="video-player" controls autoplay></video>
-                        <img src="nguema5tv_logo.png" alt="NGUEMA5TV Logo" id="fullscreen-logo" class="hidden">
-                    </div>
-                    <div class="player-controls-wrapper">
-                        <div class="stream-controls">
-                            <p>Stream source:</p>
-                            <div id="stream-buttons">
-                                <!-- Stream source buttons will be injected here -->
-                            </div>
-                        </div>
-                         <div id="audio-track-controls" class="stream-controls hidden">
-                            <p>Audio track:</p>
-                            <div id="audio-track-buttons">
-                                <!-- Audio track buttons will be injected here -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="comments-section">
-                    <h3>Live Chat</h3>
-                    <div id="comments-container">
-                        <!-- Comments will be injected here -->
-                    </div>
-                    <form id="comment-form">
-                        <textarea id="comment-input" placeholder="Add a comment..." required></textarea>
-                        <div class="comment-form-actions">
-                             <input type="file" id="comment-image-upload" accept="image/*" multiple style="display: none;">
-                            <button type="button" id="comment-image-btn" class="icon-btn" title="Attach images">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
-                            </button>
-                            <button type="submit" id="comment-submit-btn">Comment</button>
-                        </div>
-                        <div id="image-previews"></div>
-                    </form>
-                </div>
-            </div>
-        </div>
+    <div id="footer-controls">
+        <button id="prev-channel" title="Previous Channel">◀</button>
+        <button id="next-channel" title="Next Channel">▶</button>
     </div>
 
+    <script type="importmap">
+    {
+        "imports": {
+            "channels": "./channels.js",
+            "m3u-parser": "./m3u-parser.js",
+            "player": "./player.js",
+            "ui": "./ui.js"
+        }
+    }
+    </script>
     <script type="module" src="script.js"></script>
 </body>
 </html>

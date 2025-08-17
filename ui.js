@@ -1,73 +1,69 @@
-function playChannel(player, url) {
-    if (!url) {
-        console.error("URL de la chaîne non valide.");
+/**
+ * @tweakable The fallback image to use when a channel logo is missing or fails to load.
+ */
+const fallbackLogo = 'logo.png';
+
+export function updateChannelListUI(channels, filterText = '') {
+    const channelListContainer = document.getElementById('channel-list-container');
+    const statusMessage = document.getElementById('playlist-status-message');
+    channelListContainer.innerHTML = '';
+    const lowerCaseFilter = filterText.toLowerCase();
+    
+    const filteredChannels = channels.filter(channel => 
+        channel.name.toLowerCase().includes(lowerCaseFilter)
+    );
+
+    if (filteredChannels.length === 0) {
+        channelListContainer.innerHTML = '<div class="channel-item">No channels match your search.</div>';
+        if (channels.length > 0) {
+            statusMessage.textContent = `Showing 0 of ${channels.length} channels.`;
+        } else {
+            statusMessage.textContent = 'No channels loaded.';
+        }
         return;
     }
-    player.src({
-        src: url,
-        type: 'application/x-mpegURL'
-    });
-    player.play().catch(e => console.warn("Autoplay was prevented.", e));
-}
 
-function setActiveChannel(channelItems, channelElement) {
-    if (channelItems) {
-        channelItems.forEach(item => item.classList.remove('active'));
-    }
-    if (channelElement) {
-        channelElement.classList.add('active');
-        channelElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
-}
+    filteredChannels.forEach(channel => {
+        const originalIndex = channels.findIndex(c => c.url === channel.url && c.name === channel.name);
 
-export function initializeUI(channels, player) {
-    const channelListContainer = document.getElementById('channel-list');
-    const searchInput = document.getElementById('search-input');
+        const channelDiv = document.createElement('div');
+        channelDiv.className = 'channel-item';
 
-    let channelItemsHTML = '';
-    for (const channel of channels) {
-        channelItemsHTML += `
-            <div class="channel-item" data-src="${channel.src}">
-                <img src="${channel.logo}" alt="Logo ${channel.name}" onerror="this.style.display='none'">
-                <span>${channel.name}</span>
-            </div>
-        `;
-    }
-    channelListContainer.innerHTML = channelItemsHTML;
-    const channelItems = document.querySelectorAll('.channel-item');
-
-    /* @tweakable Background color of the active channel */
-    const activeChannelColor = "#007bff";
-    document.documentElement.style.setProperty('--active-channel-bg-color', activeChannelColor);
-
-    channelListContainer.addEventListener('click', function(e) {
-        const channelItem = e.target.closest('.channel-item');
-        if (channelItem) {
-            const url = channelItem.dataset.src;
-            playChannel(player, url);
-            setActiveChannel(channelItems, channelItem);
-        }
-    });
-
-    searchInput.addEventListener('input', function(e) {
-        const searchTerm = e.target.value.toLowerCase().trim();
-
-        channelItems.forEach(item => {
-            const channelName = item.querySelector('span').textContent.toLowerCase();
-            if (channelName.includes(searchTerm)) {
-                item.style.display = '';
-            } else {
-                item.style.display = 'none';
-            }
+        const logoImg = document.createElement('img');
+        logoImg.src = channel.logo || fallbackLogo;
+        logoImg.alt = `${channel.name} logo`;
+        logoImg.className = 'channel-logo';
+        logoImg.onerror = () => { logoImg.src = fallbackLogo; };
+        channelDiv.appendChild(logoImg);
+        
+        const nameSpan = document.createElement('span');
+        nameSpan.textContent = channel.name;
+        channelDiv.appendChild(nameSpan);
+        
+        channelDiv.dataset.index = originalIndex;
+        
+        channelDiv.addEventListener('click', () => {
+            const event = new CustomEvent('channel-click', { 
+                detail: { index: originalIndex },
+                bubbles: true
+            });
+            channelDiv.dispatchEvent(event);
         });
+        channelListContainer.appendChild(channelDiv);
     });
-
-    // Load the first channel by default
-    if (channels && channels.length > 0) {
-        const firstChannel = channels[0];
-        const firstChannelElement = channelItems[0];
-        playChannel(player, firstChannel.src);
-        setActiveChannel(channelItems, firstChannelElement);
-    }
+     statusMessage.textContent = `Showing ${filteredChannels.length} of ${channels.length} channels.`;
 }
 
+export function setActiveChannel(index) {
+    const channelListContainer = document.getElementById('channel-list-container');
+    const activeItem = channelListContainer.querySelector('.channel-item.active');
+    if (activeItem) activeItem.classList.remove('active');
+    
+    if (index === -1) return;
+
+    const newItem = channelListContainer.querySelector(`.channel-item[data-index="${index}"]`);
+    if (newItem) {
+        newItem.classList.add('active');
+        newItem.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+}
