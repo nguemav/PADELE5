@@ -1,0 +1,6 @@
+[
+    { "name": "WILD SIDE TV", "category": "Documentaires", "logo": "https://i.ibb.co/VvMKr5V/wildside.jpg", "country": "France", "streams": ["https://versatile-wildsidetv-1-fr.samsung.wurl.tv/playlist.m3u8"] },
+    { "name": "100% DOC", "category": "Documentaires", "logo": "https://images-3.rakuten.tv/storage/global-live-channel/translation/artwork/12870917-15e4-4030-87f1-3e44a786e858-width200-quality90.jpeg", "country": "France", "streams": ["https://amg02162-newenconnect-amg02162c2-rakuten-us-1981.playouts.now.amagi.tv/ea5a09d7-3850-4df0-ac4a-f0905c1c9b82/playlist.m3u8"] },
+    { "name": "FUTURA SANTE", "category": "Documentaires", "logo": "https://www.futura-sciences.com/svg/logo-futura-light.svg", "country": "France", "streams": ["https://stream.ads.ottera.tv/playlist.m3u8?network_id=10245"] }
+]
+

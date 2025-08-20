@@ -1,0 +1,6 @@
+[
+    { "name": "TV5MONDE VOYAGE", "category": "Voyage", "logo": "https://presse.tv5monde.com/wp-content/uploads/2024/12/9d7ef7149859cee178139a28e263b441.png", "country": "France", "streams": ["https://d1qvkge2x4ev90.cloudfront.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d1/cc-8q6p9i1t9dw2k/tvfvo.m3u8"] },
+    { "name": "VOYAGE+", "category": "Voyage", "logo": "https://tvradiozap.eu/tv/logos/voyages+.png", "country": "France", "streams": ["https://streams2.sofast.tv/ptnr-limex/title-VOYAGES-FRE_LIMEX/v1/master/611d79b11b77e2f571934fd80ca1413453772ac7/c30aa0d0-fb77-4f9b-8acf-b156ab5b969b/manifest.m3u8"] },
+    { "name": "TRAVEL XP", "category": "Voyage", "logo": "https://i.ibb.co/tYqGGQp/travelxp.jpg", "country": "France", "streams": ["https://travelxp-travelxp-4-fr.rakuten.wurl.tv/playlist.m3u8"] }
+]
+

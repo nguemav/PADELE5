@@ -1,14 +1,36 @@
 /**
- * Fetches channel data from the JSON file.
- * @returns {Promise<Array>} A promise that resolves to the array of channels.
+ * Fetches channel data from multiple JSON files.
+ * @returns {Promise<Array>} A promise that resolves to the combined and flattened array of channels.
  */
 export async function getChannels() {
+    const channelFiles = [
+        './data/generalis.json',
+        './data/divertissement.json',
+        './data/info.json',
+        './data/cinema.json',
+        './data/series-films.json',
+        './data/musique.json',
+        './data/jeunesse.json',
+        './data/sport.json',
+        './data/culture.json',
+        './data/documentaires.json',
+        './data/voyage.json',
+        './data/autres.json'
+    ];
+
     try {
-        const response = await fetch('./channels.json');
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+        const responses = await Promise.all(channelFiles.map(file => fetch(file)));
+        
+        for (const response of responses) {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status} for ${response.url}`);
+            }
         }
-        return await response.json();
+        
+        const channelArrays = await Promise.all(responses.map(res => res.json()));
+        
+        // Flatten the array of arrays into a single array of channels
+        return channelArrays.flat();
     } catch (error) {
         console.error("Could not fetch channels:", error);
         return []; // Return empty array on failure

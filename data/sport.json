@@ -1,0 +1,7 @@
+[
+    { "name": "1OO% ADRÉNALINE", "category": "Sport", "logo": "https://tvpdotcomdynamiclogopeu.samsungcloud.tv/resize?url=https://tvpnlogopeu.samsungcloud.tv/platform/image/sourcelogo/vc/00/02/34/FR3800001ZU_20250121T012919SQUARE.png&h=250", "country": "France", "streams": ["https://d1brvotibwi5cb.cloudfront.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d1/cc-f1710daci2xex/live/fast-channel-100adrenaline-cfcb8564/fast-channel-100adrenaline-cfcb8564.m3u8"] },
+    { "name": "SPORT EN FRANCE", "category": "Sport", "logo": "https://i.ibb.co/p1stMyz/sportenfr.webp", "country": "France", "streams": ["https://sp1564435593.mytvchain.info/live/sp1564435593/index.m3u8"] },
+    { "name": "RAKUTEN FAMILY", "category": "Sport", "logo": "https://www.rakuten.design/assets/img/award/branding-identity/img_mv.png", "country": "France", "streams": ["https://b3088e48baab418a9a95dc8110a1b736.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6206/master.m3u8"] },
+    { "name": "NBA TV", "category": "Sport", "logo": "https://cdn.nba.com/manage/2021/02/NBATV-logo-horizontal.jpg", "country": "International", "streams": ["https://fl3.moveonjoy.com/NBA_TV/index.m3u8"] },
+    { "name": "WOMEN SPORT NETWORK", "category": "Sport", "logo": "https://www.sportsvideo.org/wp-content/uploads/2024/12/dQu79Bb8_400x400.png", "country": "International", "streams": ["https://raw.githubusercontent.com/mikekaprielian/rtnaodhor93n398/main/fr/videotf1.m3u8"] }
+]

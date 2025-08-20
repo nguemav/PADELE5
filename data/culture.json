@@ -1,0 +1,6 @@
+[
+    { "name": "RMC Découverte", "category": "Culture", "logo": "https://static-cdn.tv.sfr.net/data/img/apps/edito/attachment/animation/tile/logoschaines169rmcdecouvertecouleurs.png", "country": "France", "streams": ["https://d16zzycxcd0m0r.cloudfront.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d1/cc-hixvx5kymecr9/RMC_Decouverte_FR.m3u8"] },
+    { "name": "SCIENCE ET VIE TV", "category": "Culture", "logo": "https://github.com/tv-logo/tv-logos/blob/main/countries/france/science-and-vie-tv-fr.png?raw=true", "country": "France", "streams": ["https://stream.ads.ottera.tv/playlist.m3u8?network_id=14172"] },
+    { "name": "FUTURA SCIENCES", "category": "Culture", "logo": "https://www.futura-sciences.com/svg/logo-futura-light.svg", "country": "France", "streams": ["https://stream.ads.ottera.tv/playlist.m3u8?network_id=10243"] },
+    { "name": "FUTURA TECH", "category": "Culture", "logo": "https://www.futura-sciences.com/svg/logo-futura-light.svg", "country": "France", "streams": ["https://stream.ads.ottera.tv/playlist.m3u8?network_id=10246"] }
+]
