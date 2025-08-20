@@ -1,97 +1,66 @@
-/* @tweakable HLS.js configuration options. See https://hls-js.com/docs/api-reference for details */
-const hlsConfig = {
-    startPosition: -1,
-    maxBufferLength: 30,
-    maxMaxBufferLength: 600,
-    enableWorker: true,
-};
+import * as ui from './ui.js';
 
 let hls;
+const videoPlayer = document.getElementById('video-player');
 
-function showLoading() {
-    const loadingOverlay = document.getElementById('loading-overlay');
-    if (loadingOverlay) {
-        loadingOverlay.classList.remove('hidden');
-    }
+/**
+ * Starts playback for a given channel.
+ * @param {object} channel - The channel object.
+ */
+export function startPlayback(channel) {
+    ui.setupStreamButtons(channel.streams, playStream);
 }
 
-function hideLoading() {
-    const loadingOverlay = document.getElementById('loading-overlay');
-    if (loadingOverlay) {
-        loadingOverlay.classList.add('hidden');
-    }
-}
-
-function initializeHls() {
-    const video = document.getElementById('videoPlayer');
+/**
+ * Plays a specific stream URL using HLS.js or native playback.
+ * @param {string} streamUrl - The URL of the video stream.
+ */
+function playStream(streamUrl) {
     if (hls) {
         hls.destroy();
     }
-    hls = new Hls(hlsConfig);
-    hls.attachMedia(video);
-
-    hls.on(Hls.Events.FRAG_LOADED, hideLoading);
-    video.addEventListener('playing', hideLoading, { once: true });
     
-    hls.on(Hls.Events.ERROR, function (event, data) {
-        if (data.fatal) {
-            switch (data.type) {
-                case Hls.ErrorTypes.NETWORK_ERROR:
-                    console.error('Fatal network error, trying to recover');
-                    hls.startLoad();
-                    break;
-                case Hls.ErrorTypes.MEDIA_ERROR:
-                    console.error('Fatal media error, trying to recover');
-                    hls.recoverMediaError();
-                    break;
-                default:
-                    console.error('Unrecoverable error', data);
-                    hls.destroy();
-                    break;
-            }
-        }
-    });
-}
+    // Clear previous audio tracks
+    ui.setupAudioTrackButtons(null);
 
-export function setHlsInstance(instance) {
-    hls = instance;
-}
-
-export function playStream(url) {
-    const video = document.getElementById('videoPlayer');
-    if (!url) {
-        if (hls) {
-            hls.destroy();
-            hls = null;
-        }
-        video.src = '';
-        video.load();
-        hideLoading();
-        return;
-    }
-    
-    showLoading();
-    if (Hls && Hls.isSupported()) {
-        if (!hls) {
-            initializeHls();
-        }
-        hls.loadSource(url);
-        hls.once(Hls.Events.MANIFEST_PARSED, function () {
-            video.play().catch(error => {
-                console.warn("Autoplay was prevented:", error);
-                hideLoading();
+    if (streamUrl.includes('.m3u8')) {
+        if (Hls.isSupported()) {
+            hls = new Hls();
+            hls.loadSource(streamUrl);
+            hls.attachMedia(videoPlayer);
+            hls.on(Hls.Events.MANIFEST_PARSED, () => {
+                videoPlayer.play().catch(e => console.error("Autoplay was prevented:", e));
             });
-        });
-    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-        video.src = url;
-        video.addEventListener('loadedmetadata', function () {
-            video.play().catch(error => console.warn("Autoplay was prevented:", error));
-        }, { once: true });
-        video.addEventListener('playing', hideLoading, { once: true });
+            hls.on(Hls.Events.AUDIO_TRACKS_UPDATED, () => {
+                ui.setupAudioTrackButtons(hls);
+            });
+            hls.on(Hls.Events.ERROR, (event, data) => {
+                if (data.fatal) {
+                   console.error('HLS fatal error:', data);
+                }
+            });
+        } else if (videoPlayer.canPlayType('application/vnd.apple.mpegurl')) {
+            videoPlayer.src = streamUrl;
+            videoPlayer.addEventListener('loadedmetadata', () => {
+                videoPlayer.play().catch(e => console.error("Autoplay was prevented:", e));
+            });
+        }
     } else {
-        console.error("HLS is not supported in this browser.");
-        alert("Your browser does not support HLS playback.");
-        hideLoading();
+        // Fallback for non-HLS streams
+        videoPlayer.src = streamUrl;
+        videoPlayer.play().catch(e => console.error("Autoplay was prevented:", e));
     }
 }
 
+/**
+ * Destroys the HLS instance and stops the video.
+ */
+export function destroyPlayer() {
+    if (hls) {
+        hls.destroy();
+        hls = null;
+    }
+    videoPlayer.pause();
+    videoPlayer.src = '';
+    videoPlayer.removeAttribute('src'); // Ensure it's fully cleared
+}
