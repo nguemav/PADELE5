@@ -29,7 +29,7 @@ async function init() {
     }
 
     try {
-        allChannels = await api.getChannels();
+        allChannels = api.getChannels();
         ui.renderChannels(allChannels, onChannelClick);
     } catch (e) {
         console.error("Error loading channels:", e);
