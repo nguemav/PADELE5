@@ -1,0 +1,10 @@
+export const africanChannels = [
+    { name: "AFROBEAT", category: "Musique", logo: "https://mir-s3-cdn-cf.behance.net/projects/404/6722e0127448889.Y3JvcCw1NDAwLDQyMjMsMCw1ODg.jpg", country: "Afrique", streams: ["https://stream.ecable.tv/afrobeats/index.m3u8"] },
+    { name: "NTV", category: "Généraliste", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/NtvLOGO.png/300px-NtvLOGO.png", country: "Afrique", streams: ["https://strhlslb01.streamakaci.tv/str_ntv_ntv/str_ntv_ntv_multi/playlist.m3u8"] },
+    { name: "DIASPORA CHANNEL", category: "Généraliste", logo: "https://www.diaspora-channel.com/wp-content/uploads/2020/12/13DE2A4C-28B3-43CF-9AD5-A5D7EF8A4B98.png", country: "Afrique", streams: ["https://vdo3.pro-fhi.net:3218/stream/play.m3u8"] },
+    { name: "AFRO MGIC CHANNEL", category: "Généraliste", logo: "https://www.lyngsat.com/logo/tv/aa/afro-magic-channel.png", country: "Afrique", streams: ["https://video1.getstreamhosting.com:1936/8490/8490/playlist.m3u8"] },
+    { name: "IVOIRE CHANNEL", category: "Généraliste", logo: "https://i.imgur.com/gKbNqQv.png", country: "Côte d'ivoire", streams: ["https://video1.getstreamhosting.com:1936/8244/8244/playlist.m3u8"] },
+    { name: "CEN TV", category: "Généraliste", logo: "http://www.centv.ci/images/44893315_718353975187139_6159975244204343296_n.jpg", country: "Côte d'ivoire", streams: ["https://strhlslb01.streamakaci.tv/cen/cen-multi/playlist.m3u8"] },
+    { name: "AFROCULTURE", category: "Culture", logo: "https://myafroculture.com/wp-content/uploads/2023/02/logo-light.png", country: "Afrique", streams: ["https://streamtv.cmediahosthosting.net:3836/live/myafroculturelive.m3u8"] },
+    { name: "NGUEMA5TV", category: "Généraliste", logo: "nguema5tv_logo.png", country: "Gabon", streams: ["https://live.nguema.tv/live/nguematv-compack.m3u8"] }
+];

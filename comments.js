@@ -1,123 +1,117 @@
-import * as api from './api.js';
 import * as ui from './ui.js';
 
-// --- STATE ---
-let currentProjectId;
+let projectId;
 let commentImageFiles = [];
 
-// --- DOM ELEMENTS ---
-const commentForm = document.getElementById('comment-form');
-const commentInput = document.getElementById('comment-input');
-const commentImageBtn = document.getElementById('comment-image-btn');
-const commentImageUpload = document.getElementById('comment-image-upload');
-const imagePreviewsContainer = document.getElementById('image-previews');
-const commentsContainer = document.getElementById('comments-container');
-
 /**
- * Sets up all event listeners for the comments section.
- * @param {string} projectId - The current project ID.
+ * Initializes the comments module by fetching the project ID.
  */
-export function initializeComments(projectId) {
-    currentProjectId = projectId;
-    
-    // Listen for real-time comment creation
-    window.websim.addEventListener('comment:created', handleNewComment);
-
-    // Form submission
-    commentForm.addEventListener('submit', handleFormSubmit);
-
-    // Image upload handling
-    commentImageBtn.addEventListener('click', () => commentImageUpload.click());
-    commentImageUpload.addEventListener('change', handleImageSelection);
-    imagePreviewsContainer.addEventListener('click', handleRemovePreview);
+export async function init() {
+    try {
+        const project = await window.websim.getCurrentProject();
+        projectId = project.id;
+    } catch (e) {
+        console.error("Error getting project info:", e);
+    }
 }
 
 /**
- * Loads and renders comments for the current project.
+ * Fetches and displays comments for the current project.
  */
-export async function loadAndRenderComments() {
-    if (!currentProjectId) return;
-    commentsContainer.innerHTML = '<p>Loading comments...</p>';
+export async function loadComments() {
+    if (!projectId) return;
+    ui.commentsContainer.innerHTML = '<p>Loading comments...</p>';
     try {
-        const response = await api.loadComments(currentProjectId);
-        ui.renderCommentList(response.data);
+        const response = await fetch(`/api/v1/projects/${projectId}/comments`);
+        const data = await response.json();
+        ui.commentsContainer.innerHTML = '';
+        if (data.comments.data.length === 0) {
+            ui.commentsContainer.innerHTML = '<p>No comments yet. Be the first!</p>';
+        } else {
+            data.comments.data.forEach(commentData => {
+                const commentEl = ui.renderComment(commentData.comment);
+                ui.commentsContainer.appendChild(commentEl);
+            });
+            ui.commentsContainer.scrollTop = ui.commentsContainer.scrollHeight;
+        }
     } catch (error) {
         console.error('Error loading comments:', error);
-        commentsContainer.innerHTML = '<p>Could not load comments.</p>';
+        ui.commentsContainer.innerHTML = '<p>Could not load comments.</p>';
     }
 }
 
-/**
- * Clears the comment display and local state.
- */
-export function clearComments() {
-    ui.clearCommentsContainer();
-    commentImageFiles = [];
-    ui.renderImagePreviews(commentImageFiles);
-    commentInput.value = '';
-}
-
-/**
- * Handles the comment form submission.
- * @param {Event} e - The form submission event.
- */
-async function handleFormSubmit(e) {
-    e.preventDefault();
-    const content = commentInput.value.trim();
-    if (!content && commentImageFiles.length === 0) return;
-
-    ui.setSubmitButtonState(true, 'Posting...');
-
-    try {
-        await api.postComment(content, commentImageFiles);
-        // Success! The 'comment:created' event will handle UI updates.
-    } catch (error) {
-        console.error('Error posting comment:', error);
-        alert('Could not post comment. Please try again.');
-    } finally {
-        ui.setSubmitButtonState(false, 'Comment');
-    }
-}
-
-/**
- * Handles the real-time 'comment:created' event.
- * @param {object} data - The event payload containing the new comment.
- */
-function handleNewComment(data) {
-  const comment = data.comment;
-  // Ignore replies for now as we don't have a nested UI
-  if (comment.parent_comment_id) return; 
-
-  ui.addNewComment(comment);
-
-  // Clear the form since the comment was successful
-  commentInput.value = '';
-  commentImageFiles = [];
-  ui.renderImagePreviews(commentImageFiles);
-}
-
-/**
- * Handles selection of image files for a comment.
- * @param {Event} e - The file input change event.
- */
-function handleImageSelection(e) {
+function handleImageFileChange(e) {
     for (const file of e.target.files) {
         if (commentImageFiles.length < 4) {
             commentImageFiles.push(file);
         }
     }
-    ui.renderImagePreviews(commentImageFiles);
-    commentImageUpload.value = ''; // Reset input
+    ui.renderImagePreviews(commentImageFiles, removeImagePreview);
+    ui.commentImageUpload.value = '';
+}
+
+function removeImagePreview(index) {
+    commentImageFiles.splice(index, 1);
+    ui.renderImagePreviews(commentImageFiles, removeImagePreview);
+}
+
+async function handleCommentSubmit(e) {
+    e.preventDefault();
+    const content = ui.commentInput.value.trim();
+    if (!content && commentImageFiles.length === 0) return;
+
+    ui.commentSubmitBtn.disabled = true;
+    ui.commentSubmitBtn.textContent = 'Posting...';
+
+    try {
+        let imageUrls = [];
+        if (commentImageFiles.length > 0) {
+            imageUrls = await Promise.all(
+                commentImageFiles.map(file => window.websim.upload(file))
+            );
+        }
+
+        await window.websim.postComment({
+            content: content,
+            images: imageUrls,
+        });
+
+    } catch (error) {
+        console.error('Error posting comment:', error);
+        alert('Could not post comment.');
+    } finally {
+        ui.commentSubmitBtn.disabled = false;
+        ui.commentSubmitBtn.textContent = 'Comment';
+    }
+}
+
+function handleCommentCreated(data) {
+    const comment = data.comment;
+    if (comment.parent_comment_id) {
+      return; 
+    }
+  
+    const noCommentsEl = ui.commentsContainer.querySelector('p');
+    if (noCommentsEl && noCommentsEl.textContent.startsWith('No comments')) {
+        ui.commentsContainer.innerHTML = '';
+    }
+    
+    const newCommentEl = ui.renderComment(comment);
+    ui.commentsContainer.appendChild(newCommentEl);
+    ui.commentsContainer.scrollTop = ui.commentsContainer.scrollHeight;
+  
+    // Clear form
+    ui.commentInput.value = '';
+    commentImageFiles = [];
+    ui.imagePreviewsContainer.innerHTML = '';
 }
 
 /**
- * Handles removing a selected image preview.
- * @param {Event} e - The click event on the previews container.
+ * Sets up all event listeners related to the comments section.
  */
-function handleRemovePreview(e) {
-    if (e.target.classList.contains('remove-preview-btn')) {
-        const index = parseInt(e.target.dataset.index, 10);
-        commentImageFiles.splice(index, 1);
-        ui.renderImagePreviews(commentImageFiles);
-    }
+export function setupEventListeners() {
+    ui.commentImageBtn.addEventListener('click', () => ui.commentImageUpload.click());
+    ui.commentImageUpload.addEventListener('change', handleImageFileChange);
+    ui.commentForm.addEventListener('submit', handleCommentSubmit);
+    window.websim.addEventListener('comment:created', handleCommentCreated);
 }

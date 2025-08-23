@@ -1,21 +1,13 @@
-import { generalChannels } from './data/general.js';
-import { entertainmentChannels } from './data/entertainment.js';
-import { infoChannels } from './data/info.js';
-import { cinemaChannels } from './data/cinema.js';
-import { musicChannels } from './data/music.js';
-import { kidsChannels } from './data/kids.js';
-import { sportsChannels } from './data/sports.js';
-import { documentariesChannels } from './data/documentaries.js';
-import { lifestyleChannels } from './data/lifestyle.js';
+import { africanChannels } from './data/african.js';
+import { canadianChannels } from './data/canadian.js';
+import { frenchChannels } from './data/french.js';
+import { internationalChannels } from './data/international.js';
+import { swissChannels } from './data/swiss.js';
 
-export const allChannels = [
-    ...generalChannels,
-    ...entertainmentChannels,
-    ...infoChannels,
-    ...cinemaChannels,
-    ...musicChannels,
-    ...kidsChannels,
-    ...sportsChannels,
-    ...documentariesChannels,
-    ...lifestyleChannels,
+export const channels = [
+    ...frenchChannels,
+    ...swissChannels,
+    ...canadianChannels,
+    ...africanChannels,
+    ...internationalChannels,
 ];
