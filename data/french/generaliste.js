@@ -1,0 +1,10 @@
+export const generalisteChannels = [
+    { name: "TF1", category: "Généraliste", logo: "https://companieslogo.com/img/orig/TFI.PA-8c6da426.png", country: "France", streams: ["https://tvradiozap.eu/tools/np-m3u8.php/tf1hd.m3u8", "https://viamotionhsi.netplus.ch/live/eds/tf1hd/browser-HLS8/tf1hd.m3u8"] },
+    { name: "M6", category: "Généraliste", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Logo_M6_%282020%2C_fond_clair%29.svg/langfr-225px-Logo_M6_%282020%2C_fond_clair%29.svg.png", country: "France", streams: ["https://tvradiozap.eu/tools/np-m3u8.php/m6hd.m3u8", "https://viamotionhsi.netplus.ch/live/eds/m6hd/browser-HLS8/m6hd.m3u8"] },
+    { name: "TMC", category: "Généraliste", logo: "https://upload.wikimedia.org/wikipedia/commons/8/88/TMC_logo.jpg", country: "France", streams: ["https://tvradiozap.eu/tools/np-m3u8.php/tmc.m3u8", "https://viamotionhsi.netplus.ch/live/eds/tmc/browser-HLS8/tmc.m3u8"] },
+    { name: "REFLET TV", category: "Généraliste", logo: "https://reflet.tv/wp-content/uploads/2022/12/Logo_RTV.svg", country: "France", streams: ["https://edge-a3.evrideo.tv/8f37c9f0-fe22-44f4-b64a-76ad11730daf_1000026630_HLS/manifest.m3u8"] },
+    { name: "CANAL 4", category: "Généraliste", logo: "https://i.servimg.com/u/f76/20/26/59/00/untitl10.png", country: "France", streams: ["https://vdo.pro-fhi.net:3605/live/dgenlcpmlive.m3u8"] },
+    { name: "SOPHIE TV", category: "Généraliste", logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRgrV-9HP1lFL2Cx7f4GcFtvb9QgToaJ-AEZA&s", country: "France", streams: ["https://bild-und-ton.stream/sophiatv-fr/smil:sophia-tv-fr.smil/playlist.m3u8"] },
+    { name: "LITTORAL TV", category: "Généraliste", logo: "https://i.ibb.co/tLPxcFn/littoral.png", country: "France", streams: ["https://live.creacast.com/littoralfm-ch1/stream/playlist.m3u8"] },
+    { name: "RTL9", category: "Généraliste", logo: "https://tse2.mm.bing.net/th/id/OIP.Py2QY12Z73FkpSrbl3-fCQHaDb?r=0&cb=thfc1&rs=1&pid=ImgDetMain&o=7&rm=3", country: "France", streams: ["https://viamotionhsi.netplus.ch/live/eds/rtl9/browser-HLS8/rtl9.m3u8"] },
+];

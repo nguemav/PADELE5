@@ -1,0 +1,9 @@
+export const musiqueChannels = [
+    { name: "TRACE URBAN", category: "Musique", logo: "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/trace-urban-fr.png", country: "France", streams: ["https://amg01131-tracetv-traceurbanuk-samsunguk-6r213.amagi.tv/playlist/amg01131-tracetv-traceurbanuk-samsunguk/playlist.m3u8"] },
+    { name: "GENERATIONS TV", category: "Musique", logo: "https://generations.fr/media/option/logo.webp", country: "France", streams: ["https://generation-tv.vedge.infomaniak.com/livecast/generation-tv/manifest.m3u8"] },
+    { name: "ZOUKLA TV", category: "Musique", logo: "https://www.telezoukla.com/gallery_gen/354e5710b3a20b6ec2a926cfffe15241_414x152_fit.png", country: "France", streams: ["https://vdo.pro-fhi.net:3228/stream/play.m3u8"] },
+    { name: "DBM", category: "Musique", logo: "https://www.musicinafrica.net/sites/default/files/styles/profile_photo/public/images/user/201808/fbimg1523932769687.jpg", country: "France", streams: ["https://dbmtv.vedge.infomaniak.com/livecast/dbmtv/playlist.m3u8"] },
+    { name: "MADRAS TV", category: "Musique", logo: "https://www.madrasfm.tv/wp-content/uploads/2021/02/cropped-ffffddsss2.png", country: "France", streams: ["https://edge17.vedge.infomaniak.com/livecast/ik:madrasfmtv/manifest.m3u8"] },
+    { name: "MCM", category: "Musique", logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsR2bWBCDuG0zUV6aLWIBHMITas9CLgEaLJbefR6hBMTRX-M2jAGnqvB0&s", country: "France", streams: ["http://cord-cutter.net:8080/Y3DvY8/934867/160303"] },
+    { name: "CSTAR", category: "Musique", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Canal_Star_logo.svg/320px-Canal_Star_logo.svg.png", country: "France", streams: ["https://viamotionhsi.netplus.ch/live/eds/d17/browser-HLS8/d17.m3u8"] },
+];
