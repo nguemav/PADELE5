@@ -37,6 +37,7 @@ function initialize() {
         }
     });
     comments.setupEventListeners();
+    player.setupPlayerEventListeners();
 }
 
 // Splash screen and app startup logic

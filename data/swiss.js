@@ -5,5 +5,6 @@ export const swissChannels = [
     { name: "Carac2 (CH)", category: "Divertissement", logo: "https://upload.wikimedia.org/wikipedia/fr/thumb/e/e8/CARAC2_logo_2023.svg/640px-CARAC2_logo_2023.svg.png", country: "Suisse", streams: ["https://onefmmd.vedge.infomaniak.com/livecast/onefmmd/manifest.m3u8"] },
     { name: "Carac3 (CH)", category: "Divertissement", logo: "https://upload.wikimedia.org/wikipedia/fr/thumb/5/55/CARAC3_logo_2023.svg/640px-CARAC3_logo_2023.svg.png", country: "Suisse", streams: ["https://lfmmd.vedge.infomaniak.com/livecast/lfmmd/manifest.m3u8"] },
     { name: "Carac4 (CH)", category: "Divertissement", logo: "https://upload.wikimedia.org/wikipedia/fr/thumb/0/02/CARAC4_logo_2023.svg/640px-CARAC4_logo_2023.svg.png", country: "Suisse", streams: ["https://edge12.vedge.infomaniak.com/livecast/ik:compack_media_1/manifest.m3u8"] },
+    { name: "CARAC 5", category: "Divertissement", logo: "https://tvradiozap.eu/tv/logos/carac5.png", country: "Suisse", streams: ["https://viamotionhsi.netplus.ch/live/eds/teleswizz/browser-HLS8/teleswizz.m3u8"] },
     { name: "TVM3", category: "Généraliste", logo: "https://upload.wikimedia.org/wikipedia/commons/9/96/Logo_TVM3_2015.png", country: "Suisse", streams: ["https://tvm3.vedge.infomaniak.com/livecast/tvm3/manifest.m3u8"] },
 ];

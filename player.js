@@ -4,6 +4,30 @@ import { loadComments } from './comments.js';
 let hls;
 
 /**
+ * Handles fullscreen change events to show/hide the video watermark.
+ */
+function handleFullscreenChange() {
+    const watermark = document.getElementById('video-watermark');
+    const fullscreenEl = document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement;
+
+    if (fullscreenEl) {
+        watermark.classList.remove('hidden');
+    } else {
+        watermark.classList.add('hidden');
+    }
+}
+
+/**
+ * Sets up event listeners related to the video player.
+ */
+export function setupPlayerEventListeners() {
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+    document.addEventListener('mozfullscreenchange', handleFullscreenChange);
+    document.addEventListener('MSFullscreenChange', handleFullscreenChange);
+}
+
+/**
  * Sets up and plays a video stream using HLS.js or native playback.
  * @param {string} streamUrl - The URL of the video stream.
  */
