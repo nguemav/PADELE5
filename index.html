@@ -1,10 +1,11 @@
+<!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lecteur IPTV</title>
-    <link href="https://vjs.zencdn.net/8.12.0/video-js.css" rel="stylesheet" />
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 </head>
 <body>
     <div id="splash-screen">
@@ -173,7 +174,7 @@
                     <img src="https://tvpdotcomdynamiclogopeu.samsungcloud.tv/resize?url=https://tvpnlogopeu.samsungcloud.tv/platform/image/sourcelogo/vc/00/02/34/FR3700001AG_20241210T052728SQUARE.png&h=250" alt="Logo BOX-OFFICE TEEN">
                     <span>BOX-OFFICE TEEN</span>
                 </div>
-                <div class="channel-item" data-src="https://mytimefrance-rakuten-samsung.amagi.tv/playlist.m3u8">
+                <div class="channel-item" data-src="https://samsunguk-appletree-mytimefrance-samsungfr-69xit.amagi.tv/playlist/samsunguk-appletree-mytimefrance-samsungfr/playlist.m3u8">
                     <img src="https://images.samsung.com/is/image/samsung/assets/fr/smart-tv/samsung-tv-plus/all-channels/VincentM-1000x1000-circle-colored.png?$330_186_PNG$" alt="Logo mytime movie network">
                     <span>mytime movie network</span>
                 </div>
@@ -465,6 +466,134 @@
                     <img src="https://tvpnlogopeu.samsungcloud.tv/platform/image/sourcelogo/vc/00/02/34/FRBD43000016D_20241106T142627SQUARE.png" alt="Logo LOVE CRIME HISTORY">
                     <span>LOVE CRIME HISTORY</span>
                 </div>
+                <div class="channel-item" data-src="http://4kplus.info/live/02092021iptv/pwqopprrct/257.m3u8">
+                    <img src="https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/hd/cine-plus-frisson-hd-fr.png" alt="Logo CINE FRISSON">
+                    <span>CINE FRISSON</span>
+                </div>
+                <div class="channel-item" data-src="http://6f1f83d9.akadatel.com/iptv/ET85VGCD8YTWLC/6003/index.m3u8">
+                    <img src="https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/hd/cine-plus-famiz-hd-fr.png" alt="Logo CINE FAMIZ">
+                    <span>CINE FAMIZ</span>
+                </div>
+                <div class="channel-item" data-src="http://4kplus.info/live/02092021iptv/pwqopprrct/255.m3u8">
+                    <img src="https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/hd/cine-plus-emotion-hd-fr.png" alt="Logo CINE EMOTION">
+                    <span>CINE EMOTION</span>
+                </div>
+                <div class="channel-item" data-src="http://4kplus.info/live/02092021iptv/pwqopprrct/235459.m3u8">
+                    <img src="https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/ocs-city-fr.png" alt="Logo OCS">
+                    <span>OCS</span>
+                </div>
+                <div class="channel-item" data-src="http://cord-cutter.net:8080/25464931/30585186/160303?checkedby:alliptvlinks.com">
+                    <img src="https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/france/mcm-top-fr.png" alt="Logo MCM">
+                    <span>MCM</span>
+                </div>
+                <div class="channel-item" data-src="http://cord-cutter.net:8080/X5xRz0/944877/57487?checkedby:alliptvlinks.com">
+                    <img src="https://logonoid.com/images/thumbs/cinepop-logo.png" alt="Logo CINEPOP">
+                    <span>CINEPOP</span>
+                </div>
+                <div class="channel-item" data-src="http://cord-cutter.net:8080/k4Svp2/645504/116947?checkedby:alliptvlinks.com">
+                    <img src="https://tse4.mm.bing.net/th/id/OIP.wgl1MehR6M-MN8ISGw-H2gHaEo?r=0&rs=1&pid=ImgDetMain&o=7&rm=3" alt="Logo CANAL VIE">
+                    <span>CANAL VIE</span>
+                </div>
+                <div class="channel-item" data-src="http://tv14s.xyz:8080/A1Jay5/362586/57487?checkedby:alliptvlinks.com">
+                    <img src="https://quebecorexpertisemedia.com/wp-content/uploads/2022/05/Moi-Cie.jpg" alt="Logo MOI ET CIE">
+                    <span>MOI ET CIE</span>
+                </div>
+                <div class="channel-item" data-src="http://cord-cutter.net:8080/k4Svp2/645504/57498?checkedby:alliptvlinks.com">
+                    <img src="https://tse2.mm.bing.net/th/id/OIP.rztcDa4pix3UeYoHJEMVVwHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3" alt="Logo TVA SPORT1">
+                    <span>TVA SPORT1</span>
+                </div>
+                <div class="channel-item" data-src="http://cord-cutter.net:8080/k4Svp2/645504/57337?checkedby:alliptvlinks.com">
+                    <img src="https://dufourlapointe.com/wp-content/uploads/Logo-TVA-Sports-1-vertical-RGB-2.png" alt="Logo TVA SPORT2">
+                    <span>TVA SPORT2</span>
+                </div>
+                <div class="channel-item" data-src="http://193.111.244.35:7474/hustlerhd/manifest.m3u8">
+                    <img src="https://tse4.mm.bing.net/th/id/OIP.kOQxj3yM4EZOFex2stOyJwAAAA?r=0&w=277&h=182&rs=1&pid=ImgDetMain&o=7&rm=3" alt="Logo HUSTLER">
+                    <span>HUSTLER</span>
+                </div>
+                <div class="channel-item" data-src="http://103.49.40.100:30010/VIVIDREDHD">
+                    <img src="https://www.pngkit.com/png/detail/364-3647246_vivid-red-hd-frquence-vivid-astra-19-2.png" alt="Logo VIVID RED HD">
+                    <span>VIVID RED HD</span>
+                </div>
+                <div class="channel-item" data-src="http://193.27.209.122/erox/index.m3u8">
+                    <img src="https://adult-tv-channels.com/wp-content/uploads/2021/09/Erox-tv.png" alt="Logo EROX">
+                    <span>EROX</span>
+                </div>
+                <div class="channel-item" data-src="http://190.11.225.124:5000/live/playboy_hd/playlist.m3u8">
+                    <img src="https://tse1.mm.bing.net/th/id/OIP.ZMFeaLz6Xe6nriECqHR3qQHaFj?r=0&rs=1&pid=ImgDetMain&o=7&rm=3" alt="Logo PLAYBOY TV">
+                    <span>PLAYBOY TV</span>
+                </div>
+                <div class="channel-item" data-src="https://5f22d76e220e1.streamlock.net/canale7/canale7/playlist.m3u8">
+                    <img src="https://logopond.com/logos/ead71581b242a50d654e246ba6e6d867.png" alt="Logo PINK CLUB TV">
+                    <span>PINK CLUB TV</span>
+                </div>
+                <div class="channel-item" data-src="https://5f22d76e220e1.streamlock.net/canale9/canale9/playlist.m3u8">
+                    <img src="https://th.bing.com/th/id/R.c4541408b487cc0f2eda9f5a354f1570?rik=Vv6albCk8q24nw&pid=ImgRaw&r=0" alt="Logo PASSION XXX">
+                    <span>PASSION XXX</span>
+                </div>
+                <div class="channel-item" data-src="http://88.212.7.11/live/test_realitykings_sd_hevc/playlist.m3u8">
+                    <img src="https://tse3.mm.bing.net/th/id/OIP.wY0IM1TgqBv2n-ivoIHT-wHaEK?r=0&rs=1&pid=ImgDetMain&o=7&rm=3" alt="Logo REALITY KINGS TV">
+                    <span>REALITY KINGS TV</span>
+                </div>
+                <div class="channel-item" data-src="http://88.212.7.11/live/test_brazzers_hd_hevc/playlist.m3u8">
+                    <img src="https://cdn-0.tvprofil.com/img/kanali-logo/brazzerstv-europe-logo.png" alt="Logo BRAZZERS TV EUROPE">
+                    <span>BRAZZERS TV EUROPE</span>
+                </div>
+                <div class="channel-item" data-src="http://88.212.7.11/live/test_dorcel_hd_hevc/playlist.m3u8">
+                    <img src="https://tse1.explicit.bing.net/th/id/OIP.0ps5EkTVdKwKp0DBPjNi1AHaBm?r=0&rs=1&pid=ImgDetMain&o=7&rm=3" alt="Logo DORCEL TV">
+                    <span>DORCEL TV</span>
+                </div>
+                <div class="channel-item" data-src="http://88.212.7.11/live/test_extasy_hd_hevc/playlist.m3u8">
+                    <img src="https://eu-trademark.s3.amazonaws.com/009193715" alt="Logo EXTASY">
+                    <span>EXTASY</span>
+                </div>
+                <div class="channel-item" data-src="http://88.212.7.11/live/test_basbes_hd_hevc/playlist.m3u8">
+                    <img src="https://tse4.mm.bing.net/th/id/OIP.aPf6Vw7ZCJ8a_L3sJc13AwHaB7?r=0&rs=1&pid=ImgDetMain&o=7&rm=3" alt="Logo BABES TV">
+                    <span>BABES TV</span>
+                </div>
+                <div class="channel-item" data-src="https://raw.githubusercontent.com/Paradise-91/ParaTV/refs/heads/main/streams/francetv/franceinfo.m3u8">
+                    <img src="https://tse2.mm.bing.net/th/id/OIP.cDDBEED8qDJYPbbYRMRPaQHaEv?r=0&rs=1&pid=ImgDetMain&o=7&rm=3" alt="Logo FRANCE INFO">
+                    <span>FRANCE INFO</span>
+                </div>
+                <div class="channel-item" data-src="https://d161b1o6wfc5a3.cloudfront.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d1/cc-3u7sgewc3l8ri/tvfm.m3u8">
+                    <img src="https://information.tv5monde.com/sites/tv5-info/files/2022-08/logo_TV5MONDE.jpg" alt="Logo TV5 MONDE INFO">
+                    <span>TV5 MONDE INFO</span>
+                </div>
+                <div class="channel-item" data-src="https://diqx5lyj19frh.cloudfront.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d1/Emotionelle-FR-prod/master.m3u8">
+                    <img src="https://tvpnlogopeu.samsungcloud.tv/platform/image/sourcelogo/vc/00/02/34/FRBB340000115_20220323T075813SQUARE.png_20220323075816.png" alt="Logo EMOTION L">
+                    <span>EMOTION L</span>
+                </div>
+                <div class="channel-item" data-src="https://live-cdn-bfm2-euw1.bfmtv.bct.nextradiotv.com/m5/media.m3u8?bpkio_serviceid=7de32147a4f1055b8812bbac92a24d2e">
+                    <img src="https://tse2.mm.bing.net/th/id/OIP.2NdL9OIDo6zYRHLbWR9QSAHaEK?r=0&rs=1&pid=ImgDetMain&o=7&rm=3" alt="Logo BFM2">
+                    <span>BFM2</span>
+                </div>
+                <div class="channel-item" data-src="https://amg01416-faststudios-womensnetwork-plex-rzxxu.amagi.tv/playlist/amg01416-faststudios-womensnetwork-plex/playlist.m3u8">
+                    <img src="https://tse3.mm.bing.net/th/id/OIP.ds0q0FC4Iq3DNsyHAj7AlgAAAA?r=0&rs=1&pid=ImgDetMain&o=7&rm=3" alt="Logo WOMAN'S SPORT NETWORK">
+                    <span>WOMAN'S SPORT NETWORK</span>
+                </div>
+                <div class="channel-item" data-src="https://dk4ogs46bjxcw.cloudfront.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d1/cc-xr1ct045l70mz/Noovo_Cinema.m3u8">
+                    <img src="https://th.bing.com/th/id/R.03414264c642a8e56e5dcc4103f86f3b?rik=6s07OaYiVepU9A&pid=ImgRaw&r=0" alt="Logo NOOVO">
+                    <span>NOOVO</span>
+                </div>
+                <div class="channel-item" data-src="https://raw.githubusercontent.com/schumijo/iptv/main/playlists/mytf1/tmc.m3u8">
+                    <img src="https://tse3.mm.bing.net/th/id/OIP.UjH0Lms_EjycmkL1aI2I4wHaCr?r=0&rs=1&pid=ImgDetMain&o=7&rm=3" alt="Logo TMC HD">
+                    <span>TMC HD</span>
+                </div>
+                <div class="channel-item" data-src="https://raw.githubusercontent.com/schumijo/iptv/main/playlists/mytf1/tfx.m3u8">
+                    <img src="https://tse3.mm.bing.net/th/id/OIP.CEAiYubDjDPh0PVM44nS8AHaDx?r=0&rs=1&pid=ImgDetMain&o=7&rm=3" alt="Logo TFX">
+                    <span>TFX</span>
+                </div>
+                <div class="channel-item" data-src="https://viamotionhsi.netplus.ch/live/eds/m6hd/browser-HLS8/m6hd.m3u8">
+                    <img src="https://th.bing.com/th/id/R.8d93d841f1293c04ba994133bf47f657?rik=j0Mzl3h3lhWMFg&riu=http%3a%2f%2ftous-logos.com%2fwp-content%2fuploads%2f2018%2f10%2fM6-embleme.jpg&ehk=Ni4cXVNug0dApqoxK4iB%2fkx0z0DBFVOg%2fgZdGX%2b9XAg%3d&risl=&pid=ImgRaw&r=0" alt="Logo M6 HD+">
+                    <span>M6 HD+</span>
+                </div>
+                <div class="channel-item" data-src="https://fl3.moveonjoy.com/BET_SOUL/index.m3u8">
+                    <img src="https://tse2.mm.bing.net/th/id/OIP.EctGHBD0nZhXoIKkqfB8VgAAAA?r=0&rs=1&pid=ImgDetMain&o=7&rm=3" alt="Logo BET SOUL">
+                    <span>BET SOUL</span>
+                </div>
+                <div class="channel-item" data-src="https://d34e8uj4fi4k3v.cloudfront.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d1/cc-css3dozxusykg/live/fast-channel-100adrenaline-cfcb8564/fast-channel-100adrenaline-cfcb8564.m3u8">
+                    <img src="https://tvpdotcomdynamiclogopeu.samsungcloud.tv/resize?url=https://tvpnlogopeu.samsungcloud.tv/platform/image/sourcelogo/vc/00/02/34/FR220000105_20250617T031603SQUARE.png&h=320" alt="Logo TOTALE ACTION">
+                    <span>TOTALE ACTION</span>
+                </div>
                 <div class="channel-item" data-src="http://6f1f83d9.akadatel.com/iptv/ET85VGCD8YTWLC/2160/index.m3u8">
                     <img src="https://th.bing.com/th/id/R.5055db272f05be48ed168c2a167239aa?rik=vi06Zfs22WpotQ&pid=ImgRaw&r=0" alt="Logo PREMIER SPORT 1">
                     <span>PREMIER SPORT 1</span>
@@ -509,11 +638,10 @@
         </div>
         <div id="player-container">
             <div id="logo">NGUEMA5TV</div>
-            <video id="video-player" class="video-js vjs-default-skin" controls autoplay preload="auto"></video>
+            <video id="video-player" controls autoplay controlsList="nodownload nofullscreen"></video>
             <button id="fullscreen-btn" title="Plein écran"></button>
         </div>
     </div>
-    <script src="https://vjs.zencdn.net/8.12.0/video.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
