@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>NGUEMA5TV</title>
+<meta name="viewport" content="width=1920,height=1080">
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<style>
+body{margin:0;background:#000;color:#fff;font-family:Arial}
+#app{display:flex;height:100vh}
+#channels{width:300px;background:#111;overflow-y:auto}
+.channel{display:flex;align-items:center;gap:10px;padding:10px;border-bottom:1px solid #333;cursor:pointer}
+.channel span{color:#fff}
+.channel.active{background:#333}
+.logoBox{width:42px;height:42px}
+.logoBox img{width:100%;height:100%;object-fit:contain}
+.logoPlaceholder{width:42px;height:42px;background:#1e90ff}
+#player{flex:1;position:relative}
+video{width:100%;height:100%;background:#000}
+#brand{position:absolute;top:12px;left:12px;display:flex;gap:6px;align-items:center;z-index:20}
+.band{width:14px;height:28px}
+.green{background:#009e49}
+.yellow{background:#fcd116}
+.blue{background:#0033a0}
+#brandText{font-size:18px;font-weight:900;margin-left:6px}
+#miniPlay{position:absolute;bottom:20px;left:20px;width:48px;height:48px;border-radius:50%;background:rgba(0,0,0,.7);border:2px solid #fff;display:flex;align-items:center;justify-content:center;font-size:24px;cursor:pointer;z-index:20}
+#controls{position:absolute;bottom:20px;right:20px;display:flex;gap:10px;background:rgba(0,0,0,.6);padding:10px;border-radius:10px;z-index:20}
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="channels"></div>
+  <div id="player">
+    <div id="brand">
+      <div class="band green"></div>
+      <div class="band yellow"></div>
+      <div class="band blue"></div>
+      <div id="brandText">NGUEMA5TV</div>
+    </div>
+    <video id="video"></video>
+    <div id="miniPlay">▶</div>
+    <div id="controls">
+      <input type="range" id="volume" min="0" max="1" step="0.05" value="0.8">
+      <button id="fs">⛶</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const channels = [
+{name:'Trace Urban',url:'https://lightning-traceurban-samsungau.amagi.tv/playlist.m3u8',logo:'https://i.postimg.cc/28ctqry6/traceurban.png'},
+{name:'Trace Sport Stars',url:'https://lightning-tracesport-samsungau.amagi.tv/playlist.m3u8',logo:'https://i.postimg.cc/DfcHTqK1/tracesportstars.png'},
+{name:'Wild Side TV',url:'http://cfd-v4-service-channel-stitcher-use1-1.prd.pluto.tv/stitch/hls/channel/60b4d6c806ad2a00073b3108/master.m3u8?appName=web&appVersion=unknown&clientTime=0&deviceDNT=0&deviceId=8e0614c0-1f2c-11ef-86d8-5d587df108c6&deviceMake=Chrome&deviceModel=web&deviceType=web&deviceVersion=unknown&includeExtendedEvents=false&serverSideAds=false&sid=d329ef28-8c5a-4451-bc8a-ab7d7083f320',logo:'https://i.postimg.cc/wT0FBpFB/wildsidetv.png'},
+{name:'Trace Latina',url:'https://amg01131-tracetv-tracelatina-glewed-vtnk7.amagi.tv/playlist.m3u8',logo:'https://i.postimg.cc/LXKwHDX3/tracelatina.png'},
+{name:'RT France',url:'https://rt-fra.rttv.com/dvr/rtfrance/playlist.m3u8',logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/RT-France-logo.svg/512px-RT-France-logo.svg.png'},
+{name:"L'Equipe",url:'https://raw.githubusercontent.com/ipstreet312/freeiptv/master/ressources/dmotion/py/eqpe/equipe.m3u8',logo:'https://i.imgur.com/t35zhM9.png'},
+{name:'Telesud',url:'https://raw.githubusercontent.com/Sibprod/streams/main/ressources/dm/py/hls/telesud.m3u8',logo:'https://i.postimg.cc/yY23dfg2/telesud.png'},
+{name:'Littoral FM TV',url:'https://live.creacast.com/littoralfm-ch1/stream/playlist.m3u8',logo:'https://i.imgur.com/DCZKAQ1.png'},
+{name:'Gulli',url:'https://origin-caf900c010ea8046.live.6cloud.fr/out/v1/c65696b42ca34e97a9b5f54758d6dd50/cmaf/hlsfmp4_short_q2hyb21h_gulli_sd_index.m3u8',logo:'https://i.postimg.cc/Gtg1gyRy/gulli.png'},
+{name:'Fun Radio',url:'https://raw.githubusercontent.com/Sibprod/streams/main/ressources/dm/py/hls/funradiofr.m3u8',logo:'https://i.postimg.cc/kMz1ss3y/funradio.png'},
+{name:'France Inter',url:'https://raw.githubusercontent.com/Sibprod/streams/main/ressources/dm/py/hls/franceinter.m3u8',logo:'https://i.postimg.cc/7hFTvpPw/franceinter.png'},
+{name:'Franceinfo',url:'https://raw.githubusercontent.com/Sibprod/streams/main/ressources/dm/py/hls/franceinfotv.m3u8',logo:'https://i.postimg.cc/d3kTxqY5/franceinfo.png'},
+{name:'ADN TV+',url:'https://d3b73b34o7cvkq.cloudfront.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d1/cc-gz2sgqzp076kf/adn.m3u8',logo:'https://upload.wikimedia.org/wikipedia/commons/c/c7/ADN_Logo_2016.png'},
+{name:'RMC Life',url:'https://viamotionhsi.netplus.ch/live/eds/cherie25/browser-HLS8/cherie25.m3u8',logo:'https://static-cdn.tv.sfr.net/data/img/apps/edito/attachment/animation/tile/169RMCLIFEPETITvLaura.jpg?h=512'},
+{name:'W9',url:'https://viamotionhsi.netplus.ch/live/eds/w9/browser-HLS8/w9.m3u8',logo:'https://i.postimg.cc/HkTGqdns/w9.png'},
+{name:'Trek',url:'https://viamotionhsi.netplus.ch/live/eds/escales/browser-HLS8/escales.m3u8',logo:'https://i.postimg.cc/hPXWgpbN/trek.png'},
+{name:'TMC',url:'https://viamotionhsi.netplus.ch/live/eds/tmc/browser-HLS8/tmc.m3u8',logo:'https://upload.wikimedia.org/wikipedia/en/thumb/5/54/TMC_logo.svg/512px-TMC_logo.svg.png'},
+{name:'TFX',url:'https://viamotionhsi.netplus.ch/live/eds/nt1/browser-HLS8/nt1.m3u8',logo:'https://i.postimg.cc/76k0PJy2/tfx.png'},
+{name:'TF1 Series Films',url:'https://viamotionhsi.netplus.ch/live/eds/hd1/browser-HLS8/hd1.m3u8',logo:'https://i.postimg.cc/dVh85KBL/tf1seriesfilms.png'},
+{name:'TF1',url:'https://viamotionhsi.netplus.ch/live/eds/tf1hd/browser-dash/tf1hd.mpd',logo:'https://i.postimg.cc/02WYGN7T/tf1.png'},
+{name:'RMC Story',url:'https://viamotionhsi.netplus.ch/live/eds/numero23/browser-HLS8/numero23.m3u8',logo:'https://i.postimg.cc/MpjZFqGF/rmcstory.png'},
+{name:'RMC Decouverte',url:'https://viamotionhsi.netplus.ch/live/eds/rmcdecouverte/browser-HLS8/rmcdecouverte.m3u8',logo:'https://upload.wikimedia.org/wikipedia/fr/thumb/b/b3/RMC_D%C3%A9couverte_logo_2017.svg/langfr-350px-RMC_D%C3%A9couverte_logo_2017.svg.png'},
+{name:'Planete+',url:'https://viamotionhsi.netplus.ch/live/eds/planeteplus/browser-HLS8/planeteplus.m3u8',logo:'https://i.postimg.cc/wjxdYzFV/planeteplus.png'},
+{name:'Paramount Channel',url:'https://viamotionhsi.netplus.ch/live/eds/paramount/browser-HLS8/paramount.m3u8',logo:'https://i.postimg.cc/xjBWFnDh/paramountchannel.png'},
+{name:'MTV',url:'https://viamotionhsi.netplus.ch/live/eds/mtvfrance/browser-HLS8/mtvfrance.m3u8',logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/MTV_2021_%28brand_version%29.svg/512px-MTV_2021_%28brand_version%29.svg.png'},
+{name:'M6',url:'https://viamotionhsi.netplus.ch/live/eds/m6hd/browser-HLS8/m6hd.m3u8',logo:'https://i.postimg.cc/ZRxxPPmJ/m6.png'},
+{name:'Generations TV',url:'https://event.vedge.infomaniak.com/livecast/ik:generation-tv/manifest.m3u8',logo:'https://i.imgur.com/NgBrDMe.png'},
+{name:'Game One',url:'https://viamotionhsi.netplus.ch/live/eds/gameone/browser-HLS8/gameone.m3u8',logo:'https://i.postimg.cc/K8F5ps9t/gameone.png'},
+{name:'DBM TV',url:'https://dbmtv.vedge.infomaniak.com/livecast/dbmtv/playlist.m3u8',logo:'https://i.imgur.com/ab6p2SW.png'},
+{name:'C Star',url:'https://viamotionhsi.netplus.ch/live/eds/d17/browser-HLS8/d17.m3u8',logo:'https://i.postimg.cc/xdqXpfYB/cstar.png'},
+{name:'Canal+',url:'https://viamotionhsi.netplus.ch/live/eds/canalplusclair/browser-HLS8/canalplusclair.m3u8',logo:'https://i.postimg.cc/wTb9BhDR/canalplus.png'},
+{name:'Canal J',url:'https://viamotionhsi.netplus.ch/live/eds/canalj/browser-HLS8/canalj.m3u8',logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Canal_J_2019_Logo.png/512px-Canal_J_2019_Logo.png'},
+{name:'Canal 32',url:'https://event.vedge.infomaniak.com/livecast/ik:canal32_4/manifest.m3u8',logo:'https://i.imgur.com/lAsE6kN.png'},
+{name:'Animaux',url:'https://viamotionhsi.netplus.ch/live/eds/animaux/browser-HLS8/animaux.m3u8',logo:'https://i.postimg.cc/qM1d5kzc/animaux.png'},
+{name:'AB1',url:'https://viamotionhsi.netplus.ch/live/eds/ab1/browser-HLS8/ab1.m3u8',logo:'https://i.postimg.cc/wj11j4NN/ab1.png'},
+{name:'6ter',url:'https://viamotionhsi.netplus.ch/live/eds/6ter/browser-HLS8/6ter.m3u8',logo:'https://i.postimg.cc/c13TrTQV/6ter.png'},
+{name:'EUROSPORT 1',url:'https://raw.githubusercontent.com/schumijo/iptv/main/playlists/lequipe/eurosport1.m3u8',logo:''},
+{name:'EUROSPORT 2',url:'https://raw.githubusercontent.com/schumijo/iptv/main/playlists/lequipe/eurosport2.m3u8',logo:''},
+{name:'SONY ONE THE BLACKLIST',url:'https://06cb85ad6ccb4a6b97f561e62d16ad3f.mediatailor.us-west-2.amazonaws.com/v1/master/ba62fe743df0fe93366eba3a257d792884136c7f/LINEAR-822-FR-SONYONETHEBLACKLIST-LG_FR/playlist.m3u8',logo:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNlfonxTE2UBnbezQ9LSsntL8XVN5Hl7qktA&s'},
+{name:'MGG E-SPORT',url:'https://d1mdvi698umja9.cloudfront.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d1/cc-kuib43fy5umqi-ssai-prd/mgg.m3u8',logo:''},
+{name:'GONG',url:'https://cdn-uw2-prod.tsv2.amagi.tv/linear/amg01596-gongnetworks-gong-samsungfr/playlist.m3u8',logo:''},
+{name:'CINE NANAR',url:'https://d2o63bkh2qz410.cloudfront.net/v1/manifest/3722c60a815c199d9c0ef36c5b73da68a62b09d1/CineNanar-FR-prod/64953490-a5a5-4f44-a4fb-7bf3638dd24c/2.m3u8',logo:''},
+{name:"EMOTION'L",url:'https://amg00711-zylo-france-zylo-emotional-rakuten-frukp.amagi.tv/hls/amagi_hls_data_rakutenAA-zylo-emotional-rakuten/CDN/master.m3u8',logo:''},
+{name:'SONY ONE HITS ACTION',url:'https://5098a8b860504a3690fd2e7c0a18d68f.mediatailor.us-west-2.amazonaws.com/v1/master/ba62fe743df0fe93366eba3a257d792884136c7f/LINEAR-817-FR-SONYONEHITSACTION-LG_FR/playlist.m3u8',logo:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNlfonxTE2UBnbezQ9LSsntL8XVN5Hl7qktA&s'},
+{name:'SONY ONE HITS COMEDIE',url:'https://7aa9671895264ec9a384dfed1b992171.mediatailor.us-west-2.amazonaws.com/v1/master/ba62fe743df0fe93366eba3a257d792884136c7f/LINEAR-818-FR-SONYONEHITSCOMDIE-LG_FR/playlist.m3u8',logo:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNlfonxTE2UBnbezQ9LSsntL8XVN5Hl7qktA&s'},
+{name:'SONY ONE FAVORIS',url:'https://49d735318d6b4c30a24a7997ea594e1b.mediatailor.us-west-2.amazonaws.com/v1/master/ba62fe743df0fe93366eba3a257d792884136c7f/LINEAR-820-FR-SONYONEFAVORIS-LG_FR/playlist.m3u8',logo:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNlfonxTE2UBnbezQ9LSsntL8XVN5Hl7qktA&s'},
+{name:'SONY ONE SERIES COMEDIES',url:'https://4f2a3e1ff5274297b115cf0f7da1c2cd.mediatailor.us-west-2.amazonaws.com/v1/master/ba62fe743df0fe93366eba3a257d792884136c7f/LINEAR-819-FR-SONYONESRIESCOMDIE-LG_FR/playlist.m3u8',logo:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNlfonxTE2UBnbezQ9LSsntL8XVN5Hl7qktA&s'},
+{name:'SONY ONE SERIES THRILLER',url:'https://483a1e90c18641c9a6d27becd41ad892.mediatailor.us-west-2.amazonaws.com/v1/master/ba62fe743df0fe93366eba3a257d792884136c7f/LINEAR-821-FR-SONYONESRIESTHRILLER-LG_FR/playlist.m3u8',logo:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNlfonxTE2UBnbezQ9LSsntL8XVN5Hl7qktA&s'},
+{name:'INFOSPORT+',url:'http://212.102.60.80/Infosport/index.m3u8',logo:''},
+{name:'TECH&CO',url:'https://ncdn-live-bfm.pfd.sfr.net/shls/LIVE$BFM_TECHANDCO/index.m3u8?start=LIVE&end=END',logo:''},
+{name:'RMC MECANIC',url:'https://jmp2.uk/stvp-FR300003ZB',logo:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxjiAHR4dfPV7qezGSSdA3y6hrY2z-Yfwyog&s'},
+{name:'GÉNÉRATIONS TV',url:'https://edge11.vedge.infomaniak.com/livecast/ik:generation-tv/manifest.m3u8',logo:''},
+{name:'BBLACK! AFRICA',url:'http://livevideo.vedge.infomaniak.com/livecast/ik:bblackafrica/manifest.m3u8',logo:''},
+{name:'BBLACK! CARIBBEAN',url:'http://livevideo.vedge.infomaniak.com/livecast/ik:bblackcaribbean/manifest.m3u8',logo:''},
+{name:'BBLACK! CLASSIK',url:'http://livevideo.vedge.infomaniak.com/livecast/ik:bblackclassik/manifest.m3u8',logo:''},
+{name:'RMC Wow',url:'https://jmp2.uk/stvp-FR300001M1',logo:'https://upload.wikimedia.org/wikipedia/commons/7/77/Logo-rmctv.jpg'},
+{name:'RMC MYSTERE',url:'https://jmp2.uk/stvp-FR300006GF',logo:'https://upload.wikimedia.org/wikipedia/commons/7/77/Logo-rmctv.jpg'},
+{name:'Wasabi',url:'https://jmp2.uk/stvp-FRBD41000051L',logo:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQbhAxoxNsGUIddK4U3fTqNDEbHqqKd3J2wsw&s'},
+{name:'Voyages & Saveurs',url:'https://jmp2.uk/stvp-FR3600005C7',logo:'https://images.pluto.tv/channels/680291e38e1ff89c2427aefd/featuredImage_1749650211199.jpg'},
+{name:'Invitation au voyage',url:'https://jmp2.uk/stvp-FR3700004HZ',logo:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDXN4gWs2jsdp8tCOdGMuFmN8O__Cs8WVGQw&s'},
+{name:'TV5 MONDE+ Chefs',url:'https://jmp2.uk/stvp-FR1300003HM',logo:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQAE4udgeFMrDVNRT8oQMLpWR_gPPwbAI5FXA&s'},
+{name:'TV5 Monde Voyage',url:'https://jmp2.uk/stvp-FR1800004EP',logo:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQH-b8nEqVxdBX7H9xX7VnaHs-o8FdTtHO7WA&s'},
+{name:'Box Office Drama',url:'https://jmp2.uk/stvp-FR3700003N4',logo:'https://www.boxofficepro.com/wp-content/uploads/2022/07/The-Boxoffice-Company-logo.png'},
+{name:'Box Office Thriller',url:'https://jmp2.uk/stvp-FR3700001AG',logo:'https://www.boxofficepro.com/wp-content/uploads/2022/07/The-Boxoffice-Company-logo.png'},
+{name:'Shadowz',url:'https://jmp2.uk/stvp-FR1800003VF',logo:'https://pic.clubic.com/v1/images/1968795/raw'},
+{name:'Shark TV',url:'https://jmp2.uk/stvp-FR4000002JN',logo:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwDE_6kKudYB2pD8MsPE0ZPOJOM9mSkhJTTA&s'},
+{name:'Box Office Action',url:'https://jmp2.uk/stvp-FR370000288',logo:'https://www.boxofficepro.com/wp-content/uploads/2022/07/The-Boxoffice-Company-logo.png'},
+{name:'Drames - Rakuten TV',url:'https://jmp2.uk/stvp-FR2600005LH',logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Rakuten_TV_logo.svg/1280px-Rakuten_TV_logo.svg.png'},
+{name:"Films d'action - Rakuten TV",url:'https://jmp2.uk/stvp-FR2600002X9',logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Rakuten_TV_logo.svg/1280px-Rakuten_TV_logo.svg.png'},
+{name:'RTS1',url:'https://viamotionhsi.netplus.ch/live/eds/rts1hd/browser-HLS8/rts1hd.m3u8',logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/RTS_1_Logo_2023.svg/330px-RTS_1_Logo_2023.svg.png'},
+{name:'RTS2',url:'https://viamotionhsi.netplus.ch/live/eds/rts2hd/browser-HLS8/rts2hd.m3u8',logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/RTS_2_Logo_2023.svg/330px-RTS_2_Logo_2023.svg.png'},
+{name:'Carac1 (CH)',url:'https://rougetv.vedge.infomaniak.com/livecast/rougetv/master.m3u8',logo:'https://upload.wikimedia.org/wikipedia/fr/thumb/7/74/CARAC1_logo_2023.svg/640px-CARAC1_logo_2023.svg.png'},
+{name:'Carac2 (CH)',url:'https://onefmmd.vedge.infomaniak.com/livecast/onefmmd/manifest.m3u8',logo:'https://upload.wikimedia.org/wikipedia/fr/thumb/e/e8/CARAC2_logo_2023.svg/640px-CARAC2_logo_2023.svg.png'},
+{name:'Carac3 (CH)',url:'https://lfmmd.vedge.infomaniak.com/livecast/lfmmd/manifest.m3u8',logo:'https://upload.wikimedia.org/wikipedia/fr/thumb/5/55/CARAC3_logo_2023.svg/640px-CARAC3_logo_2023.svg.png'},
+{name:'Carac4 (CH)',url:'https://edge12.vedge.infomaniak.com/livecast/ik:compack_media_1/manifest.m3u8',logo:'https://upload.wikimedia.org/wikipedia/fr/thumb/0/02/CARAC4_logo_2023.svg/640px-CARAC4_logo_2023.svg.png'},
+{name:'Action Totale',url:'https://d34e8uj4fi4k3v.cloudfront.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d1/cc-css3dozxusykg/live/fast-channel-100adrenaline-cfcb8564/fast-channel-100adrenaline-cfcb8564.m3u8',logo:'https://tvpdotcomdynamiclogopeu.samsungcloud.tv/resize?url=https://tvpnlogopeu.samsungcloud.tv/platform/image/sourcelogo/vc/00/02/34/FR220000105_20250617T031603SQUARE.png&h=320'},
+{name:'h_865/lgtv_logo_2024_by_alexpasley_dhtz284-fullview.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9ODY1IiwicGF0aCI6Ii9mL2NmNWY5OTYyLTJhYTYtNGQ2Yy1hZDQ4LTQ5M2QzNjk5NmJkMi9kaHR6Mjg0LTEwMTcyYTkxLWMyOTctNDAzOS1hN2ZiLTc1YzNmYWI1ZGJjZC5wbmciLCJ3aWR0aCI6Ijw9MTI4MCJ9XV0sImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS5vcGVyYXRpb25zIl19.yhKBk0DKgfKp19ZuL7I1wPa3jUJOhSsfG1mqth96Omo",LG 1',url:'https://stream.ads.ottera.tv/playlist.m3u8?network_id=12782',logo:'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/cf5f9962-2aa6-4d6c-ad48-493d36996bd2/dhtz284-10172a91-c297-4039-a7fb-75c3fab5dbcd.png/v1/fill/w_1280,h_865/lgtv_logo_2024_by_alexpasley_dhtz284-fullview.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9ODY1IiwicGF0aCI6Ii9mL2NmNWY5OTYyLTJhYTYtNGQ2Yy1hZDQ4LTQ5M2QzNjk5NmJkMi9kaHR6Mjg0LTEwMTcyYTkxLWMyOTctNDAzOS1hN2ZiLTc1YzNmYWI1ZGJjZC5wbmciLCJ3aWR0aCI6Ijw9MTI4MCJ9XV0sImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS5vcGVyYXRpb25zIl19.yhKBk0DKgfKp19ZuL7I1wPa3jUJOhSsfG1mqth96Omo'},
+{name:'h_865/lgtv_logo_2024_by_alexpasley_dhtz284-fullview.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9ODY1IiwicGF0aCI6Ii9mL2NmNWY5OTYyLTJhYTYtNGQ2Yy1hZDQ4LTQ5M2QzNjk5NmJkMi9kaHR6Mjg0LTEwMTcyYTkxLWMyOTctNDAzOS1hN2ZiLTc1YzNmYWI1ZGJjZC5wbmciLCJ3aWR0aCI6Ijw9MTI4MCJ9XV0sImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS5vcGVyYXRpb25zIl19.yhKBk0DKgfKp19ZuL7I1wPa3jUJOhSsfG1mqth96Omo",LG 1:Film',url:'https://stream-us-east-1.getpublica.com/playlist.m3u8?network_id=13954',logo:'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/cf5f9962-2aa6-4d6c-ad48-493d36996bd2/dhtz284-10172a91-c297-4039-a7fb-75c3fab5dbcd.png/v1/fill/w_1280,h_865/lgtv_logo_2024_by_alexpasley_dhtz284-fullview.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9ODY1IiwicGF0aCI6Ii9mL2NmNWY5OTYyLTJhYTYtNGQ2Yy1hZDQ4LTQ5M2QzNjk5NmJkMi9kaHR6Mjg0LTEwMTcyYTkxLWMyOTctNDAzOS1hN2ZiLTc1YzNmYWI1ZGJjZC5wbmciLCJ3aWR0aCI6Ijw9MTI4MCJ9XV0sImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS5vcGVyYXRpb25zIl19.yhKBk0DKgfKp19ZuL7I1wPa3jUJOhSsfG1mqth96Omo'},
+{name:'h_865/lgtv_logo_2024_by_alexpasley_dhtz284-fullview.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9ODY1IiwicGF0aCI6Ii9mL2NmNWY5OTYyLTJhYTYtNGQ2Yy1hZDQ4LTQ5M2QzNjk5NmJkMi9kaHR6Mjg0LTEwMTcyYTkxLWMyOTctNDAzOS1hN2ZiLTc1YzNmYWI1ZGJjZC5wbmciLCJ3aWR0aCI6Ijw9MTI4MCJ9XV0sImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS5vcGVyYXRpb25zIl19.yhKBk0DKgfKp19ZuL7I1wPa3jUJOhSsfG1mqth96Omo",LG 1+1',url:'https://stream.ads.ottera.tv/playlist.m3u8?network_id=12780',logo:'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/cf5f9962-2aa6-4d6c-ad48-493d36996bd2/dhtz284-10172a91-c297-4039-a7fb-75c3fab5dbcd.png/v1/fill/w_1280,h_865/lgtv_logo_2024_by_alexpasley_dhtz284-fullview.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9ODY1IiwicGF0aCI6Ii9mL2NmNWY5OTYyLTJhYTYtNGQ2Yy1hZDQ4LTQ5M2QzNjk5NmJkMi9kaHR6Mjg0LTEwMTcyYTkxLWMyOTctNDAzOS1hN2ZiLTc1YzNmYWI1ZGJjZC5wbmciLCJ3aWR0aCI6Ijw9MTI4MCJ9XV0sImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS5vcGVyYXRpb25zIl19.yhKBk0DKgfKp19ZuL7I1wPa3jUJOhSsfG1mqth96Omo'},
+{name:'MyTime Movie Network',url:'https://samsunguk-appletree-mytimefrance-samsungfr-69xit.amagi.tv/playlist/samsunguk-appletree-mytimefrance-samsungfr/playlist.m3u8',logo:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7mWHVee3EXcchnMXJ1Namsfn1xXzmjjW0DA&s'},
+{name:'Rakuten TV Comédies',url:'https://cc9f70371e7144e7acae4de8b5832d7a.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6183/master.m3u8',logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Rakuten_TV_logo.svg/1280px-Rakuten_TV_logo.svg.png'},
+{name:'Rakuten TV Romance',url:'https://9affb6144c4c4cdca25d58908cb55a64.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6195/master.m3u8',logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Rakuten_TV_logo.svg/1280px-Rakuten_TV_logo.svg.png'},
+{name:'Rakuten TV Thrillers',url:'https://thriller-rakuten-tv-fr.fast.rakuten.tv/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6479/master.m3u8',logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Rakuten_TV_logo.svg/1280px-Rakuten_TV_logo.svg.png'},
+{name:'Rakuten TV Top Films',url:'https://93ed06eba1ef4cf783b66dc6ea7c4f28.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-5986/master.m3u8',logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Rakuten_TV_logo.svg/1280px-Rakuten_TV_logo.svg.png'},
+{name:'Trailers',url:'https://amg01821-lovetvchannels-lovemagazinefr-samsungfr-3s8nt.amagi.tv/playlist/amg01821-lovetvchannels-lovemagazinefr-samsungfr/playlist.m3u8',logo:'https://tvpnlogopeu.samsungcloud.tv/platform/image/sourcelogo/vc/00/02/34/FRBC9000041F_20240117T032749SQUARE.png_20240117032749.png'},
+{name:'Wildside TV',url:'https://versatile-wildsidetv-1-fr.samsung.wurl.tv/playlist.m3u8',logo:'https://d1nslcd7m2225b.cloudfront.net/Pictures/480xAny/0/5/4/1348054_thiswildsidetv_logo_925227.jpg'},
+{name:'Le Monde en 24 H',url:'https://stream.berosat.live:19360/monde24h-tv-index/monde24h-tv-index.m3u8',logo:'https://cdn.technettv.com/channel/32754/logo_256.jpg'},
+{name:'Rakuten TV Famille',url:'https://b3088e48baab418a9a95dc8110a1b736.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6206/master.m3u8',logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Rakuten_TV_logo.svg/1280px-Rakuten_TV_logo.svg.png'},
+{name:'Supertoons',url:'https://d37aiu112stb78.cloudfront.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d1/cc-l64mdrsnz9wn3/feed/samsung/streams/SUPERTOONS_FR/master.m3u8?token=737aa2c3f17862a448f403cd2ac2b5ef1a0c413e1cf080a13a19cea99119221f',logo:'https://tvpdotcomdynamiclogopeu.samsungcloud.tv/resize?url=https://tvpnlogopeu.samsungcloud.tv/platform/image/sourcelogo/vc/00/02/34/FRBD5100002NL_20241030T154340SQUARE.png&h=250'},
+{name:'DCM TV (91)',url:'https://vdo.pro-fhi.net:3060/stream/play.m3u8',logo:'https://i0.wp.com/www.dcmtv.fr/wp-content/uploads/2022/06/Nouveau-projet.png'},
+{name:'Love the Planet',url:'https://amg01821-lovetvchannels-lovetheplanetfrsamsung-samsungfr-hfam1.amagi.tv/playlist/amg01821-lovetvchannels-lovetheplanetfrsamsung-samsungfr/playlist.m3u8',logo:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKDbVkJl6IwE18IsWla8mOg2CZG6LLr7x0zg&s'},
+{name:'Nature time',url:'https://cdn-uw2-prod.tsv2.amagi.tv/linear/amg00090-blueantmedia-naturetime-samsungfr/playlist.m3u8',logo:'https://image.over-blog.com/c326OdIenxJHuIZjz1ijSlqs61U=/filters:no_upscale()/image%2F1046062%2F20251010%2Fob_e6ea48_capture-d-ecran-2025-10-10-121535.png'},
+{name:'Into Crime',url:'https://d1hyfk3twnpijh.cloudfront.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d1/cc-avx3hcmvfvp8q/index.m3u8',logo:'https://images.plex.tv/photo?size=small-60&scale=2&url=https://provider-static.plex.tv/epg/cms/production/82ee42cc-ff1b-4faa-97df-d99ff9b9b7e2/INTOCRIMELRED_WHITE_TEXTRDX.png'},
+{name:'h_865/lgtv_logo_2024_by_alexpasley_dhtz284-fullview.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9ODY1IiwicGF0aCI6Ii9mL2NmNWY5OTYyLTJhYTYtNGQ2Yy1hZDQ4LTQ5M2QzNjk5NmJkMi9kaHR6Mjg0LTEwMTcyYTkxLWMyOTctNDAzOS1hN2ZiLTc1YzNmYWI1ZGJjZC5wbmciLCJ3aWR0aCI6Ijw9MTI4MCJ9XV0sImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS5vcGVyYXRpb25zIl19.yhKBk0DKgfKp19ZuL7I1wPa3jUJOhSsfG1mqth96Omo",LG 1:Spotlight',url:'https://stream-us-east-1.getpublica.com/playlist.m3u8?network_id=13956',logo:'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/cf5f9962-2aa6-4d6c-ad48-493d36996bd2/dhtz284-10172a91-c297-4039-a7fb-75c3fab5dbcd.png/v1/fill/w_1280,h_865/lgtv_logo_2024_by_alexpasley_dhtz284-fullview.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9ODY1IiwicGF0aCI6Ii9mL2NmNWY5OTYyLTJhYTYtNGQ2Yy1hZDQ4LTQ5M2QzNjk5NmJkMi9kaHR6Mjg0LTEwMTcyYTkxLWMyOTctNDAzOS1hN2ZiLTc1YzNmYWI1ZGJjZC5wbmciLCJ3aWR0aCI6Ijw9MTI4MCJ9XV0sImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS5vcGVyYXRpb25zIl19.yhKBk0DKgfKp19ZuL7I1wPa3jUJOhSsfG1mqth96Omo'},
+{name:'Passion Bollywood',url:'https://d30nk0rfmci3c2.cloudfront.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d1/cc-t0spvfjnrozo2/PassionBollywood_FR.m3u8',logo:'https://thumb.canalplus.pro/bran/unsafe/842x/filters:quality%28%7BimageQualityPercentage%7D%29/image/6875883e1b097/uploads/media/PASSION_BOLLYWOOD_640x480.png'},
+{name:'Plu.TV Séries Fantastiques',url:'http://stitcher-ipv4.pluto.tv/v1/stitch/embed/hls/channel/625ec7a1c853fd00073b38fd/master.m3u8?deviceType=samsung-tvplus&deviceMake=samsung&deviceModel=samsung&deviceVersion=unknown&appVersion=unknown&deviceLat=0&deviceLon=0&deviceDNT=%257BTARGETOPT%257D&deviceId=%257BPSID%257D&advertisingId=%257BPSID%257D',logo:'https://images.pluto.tv/channels/625ec7a1c853fd00073b38fd/thumbnail_1747044090790.jpg'},
+{name:'Rakuten TV Crime',url:'https://1ffd245e4d30495e9b006502a155479e.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6214/master.m3u8',logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Rakuten_TV_logo.svg/1280px-Rakuten_TV_logo.svg.png'},
+{name:'Run:Time Film et Séries',url:'https://stream.ads.ottera.tv/playlist.m3u8?network_id=2160',logo:'https://play-lh.googleusercontent.com/G6HQDb9QkGogSMe4ZBm1Eed3t7lpTTTkoan_tZUVviICs8ydzlXYXuvdrYDCEfM2r60'},
+{name:'Kajou TV (US HT)',url:'https://video1.getstreamhosting.com:1936/8055/8055/playlist.m3u8',logo:'https://tinyurl.com/4zvt28ta'}
+];
+
+const list=document.getElementById("channels");
+const video=document.getElementById("video");
+const miniPlay=document.getElementById("miniPlay");
+const vol=document.getElementById("volume");
+const fs=document.getElementById("fs");
+let hls=null;
+
+function playChannel(i){
+ document.querySelectorAll('.channel').forEach(c=>c.classList.remove('active'));
+ list.children[i].classList.add('active');
+ if(hls){hls.destroy();hls=null}
+ video.pause(); video.removeAttribute("src");
+ if(Hls.isSupported()){hls=new Hls();hls.loadSource(channels[i].url);hls.attachMedia(video);}
+ else video.src=channels[i].url;
+ video.play(); miniPlay.style.display="none";
+}
+
+channels.forEach((c,i)=>{
+ const d=document.createElement("div");d.className="channel";
+ let l=document.createElement("div");
+ if(c.logo){l.className="logoBox";l.innerHTML='<img src="'+c.logo+'">';}
+ else l.className="logoPlaceholder";
+ const s=document.createElement("span");s.textContent=c.name;
+ d.append(l,s); d.onclick=()=>playChannel(i);
+ list.appendChild(d);
+});
+
+miniPlay.onclick=()=>video.play();
+video.onpause=()=>miniPlay.style.display="flex";
+video.onended=()=>miniPlay.style.display="flex";
+video.onerror=()=>miniPlay.style.display="flex";
+video.onplay=()=>miniPlay.style.display="none";
+vol.oninput=()=>video.volume=vol.value;
+fs.onclick=()=>{!document.fullscreenElement?document.documentElement.requestFullscreen():document.exitFullscreen();}
+</script>
+</body>
+</html>
